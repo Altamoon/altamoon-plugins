@@ -27,7 +27,7 @@
   window.biduulPlugin((store) => {
     const {
       element, settingsElement, listenSettingsSave, listenSettingsCancel,
-    } = store.app.createWidget({
+    } = store.customization.createWidget({
       id: 'hello_world',
       hasSettings: true,
       title: 'Hello World',
