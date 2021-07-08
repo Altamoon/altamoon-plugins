@@ -9,7 +9,8 @@
     "upgrade": "ncu -u && npm i --legacy-peer-deps && lerna exec -- ncu -u && lerna exec -- npm i",
     "lint-pure": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint": "npm run lint-pure -- --cache --fix",
-    "patch": "lerna run build && lerna version patch && lerna publish from-git"
+    "patch": "lerna run build && lerna version patch && lerna publish from-git",
+    "install": "lerna exec -- npm i"
   },
   "repository": {
     "type": "git",
