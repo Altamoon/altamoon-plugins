@@ -6,7 +6,10 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   ignorePatterns: ['**/dist/*.js'],
-  rules: {},
+  rules: {
+    'react/require-default-props': 0,
+    'no-restricted-syntax': 0,
+  },
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',

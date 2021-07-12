@@ -30,7 +30,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "biduul-types": "^0.0.28",
+    "biduul-types": "^0.0.31",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hot-loader": "^4.13.0"

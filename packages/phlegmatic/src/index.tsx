@@ -1,32 +1,36 @@
-import * as t from 'biduul-types';
 import React from 'react';
+import { Provider as UseChangeProvider } from 'use-change';
 
 import { render } from 'react-dom';
-import HelloWorld from './HelloWorld';
+import Phlegmatic from './Phlegmatic';
+import { RootStore } from './types';
+import PhlegmaticStore from './PhlegmaticStore';
 
-window.biduulPlugin((store: t.RootStore /* , api: Api */) => {
+window.biduulPlugin<RootStore>((store) => {
+  const { currentScript } = document;
+  if (!currentScript) throw new Error('Unable to detect currentScript');
   const {
-    element, settingsElement, listenSettingsSave, listenSettingsCancel,
+    settingsElement, element, listenSettingsSave, listenSettingsCancel,
   } = store.customization.createWidget({
-    id: 'hello_world_react',
+    id: 'phlegmatic',
     hasSettings: true,
-    title: 'Hello World React',
-    currentScript: document.currentScript,
+    title: 'Phlegmatic',
+    currentScript,
     layout: { h: 6, w: 4, minH: 5 },
   });
 
-  const createOrder = async (side: 'BUY' | 'SELL', quantity: number) => {
-    await store.trading.marketOrder({
-      quantity, side, symbol: store.persistent.symbol,
-    });
-  };
+  // eslint-disable-next-line no-param-reassign
+  store.phlegmatic = new PhlegmaticStore(store);
+
+  if (!settingsElement) throw new Error('Settings element is missing even though "hasSettings" is "true"');
 
   render((
-    <HelloWorld
-      settingsElement={settingsElement}
-      createOrder={createOrder}
-      listenSettingsSave={listenSettingsSave}
-      listenSettingsCancel={listenSettingsCancel}
-    />
+    <UseChangeProvider value={store}>
+      <Phlegmatic
+        settingsElement={settingsElement}
+        listenSettingsSave={listenSettingsSave}
+        listenSettingsCancel={listenSettingsCancel}
+      />
+    </UseChangeProvider>
   ), element);
 });
