@@ -1,7 +1,7 @@
 {
   "name": "biduul-hello-world-react",
   "version": "0.0.3",
-  "description": "Hello world example plugin for Biduul made with React, Webpack and Typesdcript",
+  "description": "Hello world example plugin for Biduul made with React, Webpack and TypeScript",
   "main": "dist/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
     "dev": "webpack serve --mode=development --hot --port=8081"
   },
   "author": "",
-  "license": "MIT",
+  "license": "AGPL",
   "babel": {
     "presets": [
       "@babel/preset-env",
@@ -30,7 +30,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "biduul-types": "^0.0.31",
+    "biduul-types": "^0.0.34",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hot-loader": "^4.13.0"

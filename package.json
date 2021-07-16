@@ -9,7 +9,8 @@
     "upgrade": "ncu -u && npm i --legacy-peer-deps && lerna exec -- ncu -u && lerna exec -- npm i",
     "lint-pure": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint": "npm run lint-pure -- --cache --fix",
-    "patch": "lerna run build && lerna version patch && lerna publish from-git",
+    "patch": "lerna run build && lerna version patch && lerna publish from-npm",
+    "minor": "lerna run build && lerna version minor && lerna publish from-npm",
     "install": "lerna exec -- npm i"
   },
   "repository": {
@@ -17,14 +18,14 @@
     "url": "git+https://github.com/finom/biduul-plugins.git"
   },
   "author": "",
-  "license": "MIT",
+  "license": "AGPL",
   "bugs": {
     "url": "https://github.com/finom/biduul-plugins/issues"
   },
   "homepage": "https://github.com/finom/biduul-plugins#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.28.2",
-    "@typescript-eslint/parser": "^4.28.2",
+    "@typescript-eslint/eslint-plugin": "^4.28.3",
+    "@typescript-eslint/parser": "^4.28.3",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.30.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -41,7 +42,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "lerna": "^4.0.0",
-    "npm-check-updates": "^11.8.2",
+    "npm-check-updates": "^11.8.3",
     "typescript": "^4.3.5"
   }
 }

@@ -5,13 +5,15 @@ import { render } from 'react-dom';
 import HelloWorld from './HelloWorld';
 
 window.biduulPlugin((store: t.RootStore /* , api: Api */) => {
+  const { currentScript } = document;
+  if (!currentScript) throw new Error('Unable to detect currentScript');
   const {
     element, settingsElement, listenSettingsSave, listenSettingsCancel,
   } = store.customization.createWidget({
     id: 'hello_world_react',
     hasSettings: true,
     title: 'Hello World React',
-    currentScript: document.currentScript,
+    currentScript,
     layout: { h: 6, w: 4, minH: 5 },
   });
 
@@ -20,6 +22,8 @@ window.biduulPlugin((store: t.RootStore /* , api: Api */) => {
       quantity, side, symbol: store.persistent.symbol,
     });
   };
+
+  if (!settingsElement) throw new Error('Settings element is missing even though "hasSettings" is "true"');
 
   render((
     <HelloWorld

@@ -1,7 +1,7 @@
 {
   "name": "biduul-phlegmatic",
   "version": "0.0.3",
-  "description": "Hello world example plugin for Biduul made with React, Webpack and Typesdcript",
+  "description": "Biduul plugin that imitates human behavior to close Binance future positions",
   "main": "dist/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
     "dev": "webpack serve --mode=development --hot --port=8083"
   },
   "author": "",
-  "license": "MIT",
+  "license": "AGPL",
   "babel": {
     "presets": [
       "@babel/preset-env",
@@ -24,6 +24,7 @@
     "@babel/preset-typescript": "^7.14.5",
     "@types/bootstrap": "^5.0.17",
     "@types/d3-format": "^3.0.1",
+    "@types/lodash": "^4.14.171",
     "@types/react": "^17.0.14",
     "@types/react-dom": "^17.0.9",
     "@types/styled-components": "^5.1.11",
@@ -34,9 +35,10 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "biduul-types": "^0.0.31",
+    "biduul-types": "^0.0.34",
     "bootstrap": "^5.0.2",
     "d3-format": "^3.0.1",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-bootstrap-icons": "^1.5.0",
     "react-dom": "^17.0.2",
