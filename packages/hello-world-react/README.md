@@ -8,7 +8,7 @@ The plugin provides basic functionality to buy or sell given quantity of tokens 
 
 It also demonstrates how to implement plugin settings. At this case it does nothing more than Buy and Sell button size change.
 
-![image](https://user-images.githubusercontent.com/1082083/126187833-662c21f4-8062-4dee-b97a-9718b379006a.png)
+![image](https://user-images.githubusercontent.com/1082083/126191597-b27a1e1c-7b34-4988-8757-088322b39ae3.png)
 
 ## Install
 
