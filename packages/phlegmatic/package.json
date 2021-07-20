@@ -1,6 +1,6 @@
 {
   "name": "biduul-phlegmatic",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Biduul plugin that imitates human behavior to close Binance future positions",
   "main": "dist/bundle.js",
   "scripts": {
