@@ -4,8 +4,25 @@ This is the [monorepo](https://en.wikipedia.org/wiki/Monorepo) for official [Bid
 
 ![image](https://user-images.githubusercontent.com/1082083/126315449-5bacd995-0c72-4bb2-a687-fb5db77a7260.png)
 
-Every plugin has full access to Biduul features (current symbol, trading functions, stats etc) and can create any number of widgets (either its none or multiple). Plugins are created with a global variable `window.biduulPlugin` that accepts a function that is going to be called by Biduul once 
-Biduul API documentation itself is going to be made later.
+Every plugin has full access to Biduul features (current symbol, trading functions, stats etc) and can create any number of widgets (either it's none or multiple). Plugins are created with a global variable `window.biduulPlugin` that accepts a function that is going to be called by Biduul once the app is loaded. 
+Biduul API itself is going to be documented later.
+
+
+```js
+window.biduulPlugin((store) => {
+  const widget = store.customization.createWidget({
+    ...
+  });
+
+  const createOrder = async (side, quantity) => {
+    await store.trading.marketOrder({
+      quantity, side, symbol: store.persistent.symbol,
+    });
+  };
+
+...
+```
+
 
 ## Third-party plugins
 
@@ -52,13 +69,13 @@ window.biduulPlugin((store: t.RootStore) => {
 
 ## React and Hot Module Replacement
 
-All official Biduul plugins are implemented with [React](https://reactjs.org/) but it's [not a requirement](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world). An example of such plugin can be found at [hello-world-react](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react). The example also demonstrates hot module replacement: a feature of used code environment that allows to re-render components with no need to reload the application completely.
+All official Biduul plugins are implemented with [React](https://reactjs.org/) but it's [not a requirement](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world). An example of such plugin can be found at [hello-world-react](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react). The example also demonstrates hot module replacement: a feature of used code environment that allows to re-render components with no need to reload the application itself.
 
 ![](https://raw.githubusercontent.com/Letiliel/biduul-plugins/main/.assets/hmr.gif)
 
 ## Publishing
 
-Biduul plugins are published at NPM via `npm publish`, trerefore every plugin has its own version. By the time being latest plugin version is used once installed but later we're going to need to restrict that to avoid incompatibility issues and improve Biduul security (in case if NPM package accesss was corrupted).
+Biduul plugins are published at NPM via `npm publish`, trerefore every plugin has its own version. By the time being latest plugin version is used once installed but later we're going to need to restrict that to avoid incompatibility issues and improve Biduul security (in case if author's NPM package accesss was corrupted).
 
 package.json file of any plugin needs to include `"main"` field that points to the plugin code **bundled as a single JavaScript file**.
 
