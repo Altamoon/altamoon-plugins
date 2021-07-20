@@ -26,6 +26,6 @@ To install the plugin select "Plugins" at Biduul UI, paste `biduul-hello-world-r
 - Run `npm run dev` to start [Webpack Dev Server](https://webpack.js.org/configuration/dev-server/)
 - Use "Add custom plugin" Biduul feature and paste `http://localhost:8081/bundle.js` to add the plugin.
 
-The example supports [Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/) intended to increase development speed.
+The example supports [Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/) intended to make plugin development faster.
 
 ![](https://raw.githubusercontent.com/Letiliel/biduul-plugins/main/.assets/hmr.gif)
