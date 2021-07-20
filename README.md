@@ -2,13 +2,9 @@
 
 This is the [monorepo](https://en.wikipedia.org/wiki/Monorepo) for official [Biduul](https://github.com/Letiliel/biduul) plugins:
 
-- [biduul-hello-world](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world) - Biduul example plugin for beginner developers
-- [biduul-hello-world-react](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react) - Biduul example plugin powered by TypeScript, Webpack and React for advanced developers
-- [biduul-phlegmatic](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react) - Biduul plugin that imitates human behavior to close Binance future positions
-
-
-
-
+- [biduul-hello-world](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world) - Biduul example plugin for beginner developers.
+- [biduul-hello-world-react](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react) - Biduul example plugin powered by TypeScript, Webpack and React for advanced developers.
+- [biduul-phlegmatic](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react) - Biduul plugin that imitates human behavior to close Binance future positions.
 
 ![image](https://user-images.githubusercontent.com/1082083/126315449-5bacd995-0c72-4bb2-a687-fb5db77a7260.png)
 
@@ -30,6 +26,10 @@ window.biduulPlugin((store) => {
 
 ...
 ```
+
+Widgets can be disabled and enabled again without stopping their plugin via Widgets menu. If a widget is disabled, its plugin still has access to the app and personal data.
+
+![image](https://user-images.githubusercontent.com/1082083/126359940-627c181c-a51f-4091-a435-fcdf85756f27.png)
 
 
 ## Third-party plugins
