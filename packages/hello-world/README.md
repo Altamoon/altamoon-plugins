@@ -1,4 +1,4 @@
-# biduul-hello-world
+# biduul-hello-world [![npm version](https://badge.fury.io/js/biduul-hello-world.svg)](https://badge.fury.io/js/biduul-hello-world)
 
 > A Biduul plugin example
 
