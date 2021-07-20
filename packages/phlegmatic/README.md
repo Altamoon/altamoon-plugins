@@ -1,4 +1,4 @@
-# biduul-phlegmatic
+# biduul-phlegmatic [![npm version](https://badge.fury.io/js/biduul-phlegmatic.svg)](https://badge.fury.io/js/biduul-phlegmatic)
 
 > Biduul plugin that imitates human behavior to close Binance future positions
 
