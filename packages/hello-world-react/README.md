@@ -1,4 +1,4 @@
-# biduul-hello-world-react
+# biduul-hello-world-react [![npm version](https://badge.fury.io/js/biduul-hello-world-react.svg)](https://badge.fury.io/js/biduul-hello-world-react)
 
 > A biduul plugin example powered by TypeScript, Webpack and React
 
