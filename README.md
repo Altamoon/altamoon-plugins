@@ -34,7 +34,7 @@ window.biduulPlugin((store: t.RootStore) => {
 
 All official Biduul plugins are implemented with [React](https://reactjs.org/) but it's [not a requirement](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world). An example of such plugin can be found at [hello-world-react](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react). The example also demonstrates hot module replacement: the environment feature that allows to re-render components with no need to reload the application completely.
 
-![](./assets/hmr.gif)
+![](https://raw.githubusercontent.com/Letiliel/biduul-plugins/main/.assets/hmr.gif)
 
 ## Publishing
 
