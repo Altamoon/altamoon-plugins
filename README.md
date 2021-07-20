@@ -1,6 +1,14 @@
 # biduul-plugins
 
-This is the [monorepo](https://en.wikipedia.org/wiki/Monorepo) for official [Biduul](https://github.com/Letiliel/biduul) plugins. 
+This is the [monorepo](https://en.wikipedia.org/wiki/Monorepo) for official [Biduul](https://github.com/Letiliel/biduul) plugins:
+
+- [biduul-hello-world](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world) - Biduul example plugin for beginner developers
+- [biduul-hello-world-react](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react) - Biduul example plugin powered by TypeScript, Webpack and React for advanced developers
+- [biduul-phlegmatic](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react) - Biduul plugin that imitates human behavior to close Binance future positions
+
+
+
+
 
 ![image](https://user-images.githubusercontent.com/1082083/126315449-5bacd995-0c72-4bb2-a687-fb5db77a7260.png)
 
