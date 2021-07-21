@@ -35,7 +35,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "biduul-types": "^0.0.36",
+    "biduul-types": "^0.0.37",
     "bootstrap": "^5.0.2",
     "d3-format": "^3.0.1",
     "lodash": "^4.17.21",
