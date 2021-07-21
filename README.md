@@ -2,11 +2,27 @@
 
 > [monorepo](https://en.wikipedia.org/wiki/Monorepo) for official [Biduul](https://github.com/Letiliel/biduul) plugins and plugin examples.
 
-- [biduul-hello-world](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world) - Biduul example plugin for beginner developers.
-- [biduul-hello-world-react](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react) - Biduul example plugin powered by TypeScript, Webpack and React for advanced developers.
 - [biduul-phlegmatic](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react) - Biduul plugin that imitates human behavior to close Binance future positions.
+- [biduul-hello-world](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world) - Biduul example plugin for beginner developers.
+- [biduul-hello-world-react](https://github.com/Letiliel/biduul-plugins/tree/main/packages/hello-world-react) - Biduul example plugin powered by TypeScript, Webpack and React for experienced developers.
 
 ![image](https://user-images.githubusercontent.com/1082083/126315449-5bacd995-0c72-4bb2-a687-fb5db77a7260.png)
+
+## Overview 
+
+Biduul plugins are published at NPM via `npm publish`, trerefore every plugin has its own version. By the time being latest plugin version is used once installed but later we're going to need to restrict that to avoid incompatibility issues and improve Biduul security (in case if author's NPM package accesss was corrupted).
+
+package.json file of any plugin needs to include `"main"` field that points to the plugin code **bundled as a single JavaScript file**.
+
+```json
+{
+  "name": "biduul-awesome-plugin",
+  "description": "My awesome plugin!",
+  "main": "dist/bundle.js",
+  ...
+```
+
+Once a plugin installed, it's going to be loaded via `<script>` tag using [UNPKG CDN](https://unpkg.com/). For example "Hello World" plugin is published as [biduul-hello-world](https://www.npmjs.com/package/biduul-hello-world) NPM package and loaded to the app as `<script src="https://unpkg.com/biduul-hello-world"></script>.`
 
 Every plugin has full access to Biduul features (current symbol, trading functions, stats etc) and can create any number of widgets (either it's none or multiple). Plugins are created with a global variable `window.biduulPlugin` that accepts a function that is going to be called by Biduul once the app is loaded. 
 Biduul API itself is going to be documented later.
@@ -81,20 +97,6 @@ All official Biduul plugins are implemented with [React](https://reactjs.org/) b
 
 ![](https://raw.githubusercontent.com/Letiliel/biduul-plugins/main/.assets/hmr.gif)
 
-## Publishing
 
-Biduul plugins are published at NPM via `npm publish`, trerefore every plugin has its own version. By the time being latest plugin version is used once installed but later we're going to need to restrict that to avoid incompatibility issues and improve Biduul security (in case if author's NPM package accesss was corrupted).
-
-package.json file of any plugin needs to include `"main"` field that points to the plugin code **bundled as a single JavaScript file**.
-
-```json
-{
-  "name": "biduul-awesome-plugin",
-  "description": "My awesome plugin!",
-  "main": "dist/bundle.js",
-  ...
-```
-
-Once a plugin installed, it's going to be loaded via `<script>` tag using [UNPKG CDN](https://unpkg.com/).
  
 
