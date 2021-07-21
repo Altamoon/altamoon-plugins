@@ -24,13 +24,13 @@ The plugin comes with all the strategies turned off out from the box. The "Defau
 
 ![image](https://user-images.githubusercontent.com/1082083/126350917-045f2e7a-c27e-4a4c-a432-e37a1d08ca22.png)
 
-Once a position is created, it can be controled separate;y from other positions.
+Once a position is created, it can be controled individually.
 
 ![image](https://user-images.githubusercontent.com/1082083/126351059-fdf9b96d-0052-4d33-98f8-d1166b418f9f.png)
 
 **Important!** It's recommended to turn off a strategy before changing its numbers to clean up intervals and avoid perventage issues; enable them after the numbers are set up.
 
-Plugin settings allow to define what type of PNL is used: "Position PNL" or "True PNL" (see Biduul documentation).
+Plugin settings allow to define what type of PNL is used: "Position PNL" or "True PNL".
 
 ![image](https://user-images.githubusercontent.com/1082083/126351574-05617fde-d148-4ec7-8690-a22106d1bdd1.png)
 
