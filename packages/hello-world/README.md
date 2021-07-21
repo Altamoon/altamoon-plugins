@@ -1,4 +1,4 @@
-# biduul-hello-world
+# biduul-hello-world [![npm version](https://badge.fury.io/js/biduul-hello-world.svg)](https://badge.fury.io/js/biduul-hello-world)
 
 > A Biduul plugin example
 
@@ -27,6 +27,7 @@ There is no environment limitation. index.js file is the complete plugin file th
 
 - Clone the repository and go the plugin folder (`cd biduul-plugins/packages/hello-world`)
 - Run `npm ci` to install dependencies.
-- Use "Add custom plugin" Biduul feature and paste `http://localhost:8083/index.js` to add the plugin.
+- Run `npm run dev` to run a simple HTTP server.
+- Use "Add custom plugin" Biduul feature and paste `http://localhost:8082/index.js` to add the plugin.
 - If you make a change to index.js file you need to reload Biduul via Ctrl + R.
 
