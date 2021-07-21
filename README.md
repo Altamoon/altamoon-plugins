@@ -10,7 +10,7 @@
 
 ## Overview 
 
-Biduul plugins are published at NPM via `npm publish`, trerefore every plugin has its own version. By the time being latest plugin version is used once installed but later we're going to need to restrict that to avoid incompatibility issues and improve Biduul security (in case if author's NPM package accesss was corrupted).
+Biduul plugins are published at NPM via `npm publish`, trerefore every plugin has its own version. By the time being latest plugin version is used once installed but later we're going to need to restrict that to avoid incompatibility issues and improve Biduul security (in case if author's NPM package accesss was corrupted). We also may want to add "compatibility" field to package.json to make developers define which versions of Biduul are compatible to the plugin (Biduul is going to need to follow [Semantic Versioning](https://semver.org/)).
 
 package.json file of any plugin needs to include `"main"` field that points to the plugin code **bundled as a single JavaScript file**.
 
