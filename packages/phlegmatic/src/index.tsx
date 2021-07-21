@@ -10,7 +10,8 @@ window.biduulPlugin<RootStore>((store) => {
   const { currentScript } = document;
   if (!currentScript) throw new Error('Unable to detect currentScript');
   const {
-    settingsElement, element, listenSettingsSave, listenSettingsCancel,
+    isWidgetInitiallyEnabled, settingsElement, element,
+    listenSettingsSave, listenSettingsCancel, listenIsWidgetEnabled, listenWidgetDestroy,
   } = store.customization.createWidget({
     id: 'phlegmatic',
     hasSettings: true,
@@ -20,7 +21,7 @@ window.biduulPlugin<RootStore>((store) => {
   });
 
   // eslint-disable-next-line no-param-reassign
-  store.phlegmatic = new PhlegmaticStore(store);
+  store.phlegmatic = new PhlegmaticStore(store, isWidgetInitiallyEnabled);
 
   if (!settingsElement) throw new Error('Settings element is missing even though "hasSettings" is "true"');
 
@@ -30,6 +31,8 @@ window.biduulPlugin<RootStore>((store) => {
         settingsElement={settingsElement}
         listenSettingsSave={listenSettingsSave}
         listenSettingsCancel={listenSettingsCancel}
+        listenIsWidgetEnabled={listenIsWidgetEnabled}
+        listenWidgetDestroy={listenWidgetDestroy}
       />
     </UseChangeProvider>
   ), element);

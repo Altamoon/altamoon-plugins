@@ -2,7 +2,7 @@ import React, {
   ReactElement, useCallback, useEffect, useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import useChange, { useSilent, useValue } from 'use-change';
+import useChange, { useSet, useSilent, useValue } from 'use-change';
 import { Table } from 'reactstrap';
 import { hot } from 'react-hot-loader/root';
 
@@ -15,14 +15,19 @@ interface Props {
   settingsElement: HTMLElement;
   listenSettingsSave: (handler: () => void) => (() => void);
   listenSettingsCancel: (handler: () => void) => (() => void);
+  listenIsWidgetEnabled: (handler: (isEnabled: boolean) => void) => (() => void);
+  listenWidgetDestroy: (handler: () => void) => (() => void);
 }
 
 const Phlegmatic = ({
   settingsElement, listenSettingsSave, listenSettingsCancel,
+  listenIsWidgetEnabled, listenWidgetDestroy,
 }: Props): ReactElement => {
   const openPositions = useValue(TRADING, 'openPositions');
   const [phlegmaticMap, setPhlegmaticMap] = useChange(PHLEGMATIC, 'phlegmaticMap');
   const defaults = useSilent(PHLEGMATIC, 'defaults');
+  const destroy = useSilent(PHLEGMATIC, 'destroy');
+  const setIsWidgetEnabled = useSet(PHLEGMATIC, 'isWidgetEnabled');
   const preservePhlegmaticMap = useCallback(
     () => setPhlegmaticMap((map) => ({ ...map })), [setPhlegmaticMap],
   );
@@ -35,6 +40,12 @@ const Phlegmatic = ({
 
   // reset pnlType setting after settings change cancel
   useEffect(() => listenSettingsCancel(() => { setSettingsPnlType(pnlType); }));
+
+  // listen if the widget is enabled or disabled
+  useEffect(() => listenIsWidgetEnabled(setIsWidgetEnabled));
+
+  // listen plugin disable
+  useEffect(() => listenWidgetDestroy(destroy));
 
   return (
     <>

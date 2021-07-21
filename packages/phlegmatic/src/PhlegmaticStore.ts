@@ -10,7 +10,7 @@ function getPersistentStorageValue<O, T>(key: keyof O & string, defaultValue: T)
 
 function log(symbol: string | null, ...msg: unknown[]) {
   // eslint-disable-next-line no-console
-  console.log(`%cPhlegmatic (${String(symbol)}) %c${msg.join(' ')}`, 'color: grey', 'color: black');
+  console.log(`%cPhlegmatic${symbol ? ` (${String(symbol)})` : ''} %c${msg.join(' ')}`, 'color: grey', 'color: black');
 }
 
 interface PhlegmaticPositionInfo {
@@ -33,6 +33,8 @@ export default class PhlegmaticStore {
   public pnlType: PnlType = getPersistentStorageValue<PhlegmaticStore, PnlType>('pnlType', 'pnl');
 
   public phlegmaticMap = getPersistentStorageValue<PhlegmaticStore, Record<string, PhlegmaticPosition>>('phlegmaticMap', {});
+
+  public isWidgetEnabled: boolean;
 
   #store: Store;
 
@@ -64,8 +66,12 @@ export default class PhlegmaticStore {
 
   #phlegmaticInfo: Record<string, PhlegmaticPositionInfo> = {};
 
-  constructor(store: RootStore) {
+  #unlistenOpenPositions: () => void;
+
+  constructor(store: RootStore, isWidgetInitiallyEnabled: boolean) {
     this.#store = store;
+    this.isWidgetEnabled = isWidgetInitiallyEnabled;
+
     Object.getOwnPropertyNames(this.#defaults).forEach((key) => {
       listenChange(this.#defaults, key as keyof PhlegmaticStore['defaults'], (value: unknown) => {
         localStorage.setItem(`phlegmatic_${key}`, JSON.stringify(value));
@@ -80,8 +86,21 @@ export default class PhlegmaticStore {
       });
     });
 
-    listenChange(store.trading, 'openPositions', this.#onOpenPositionsTick);
+    this.#unlistenOpenPositions = listenChange(store.trading, 'openPositions', this.#onOpenPositionsTick);
   }
+
+  public destroy = (): void => {
+    log(null, 'Destroy');
+    const symbolsToCleanUp = Object.keys(this.phlegmaticMap);
+
+    this.#unlistenOpenPositions();
+
+    this.isWidgetEnabled = false;
+
+    for (const symbol of symbolsToCleanUp) {
+      this.#cleanUpOnePosition(symbol);
+    }
+  };
 
   #onOpenPositionsTick = (openPositions: t.TradingPosition[]): void => {
     const newMap: Record<string, PhlegmaticPosition> = {};
@@ -104,43 +123,51 @@ export default class PhlegmaticStore {
       }
     }
 
-    if (this.#cleanUpClosedPositions(map(openPositions, 'symbol')) || isMapChanged) {
+    if (this.#cleanUpPositions(map(openPositions, 'symbol')) || isMapChanged) {
       // trigger map change if some symbol is added or removed
       this.phlegmaticMap = newMap;
     }
   };
 
-  #cleanUpClosedPositions = (symbols: string[]): boolean => {
+  #cleanUpPositions = (symbols: string[]): boolean => {
     const symbolsToCleanUp = difference(Object.keys(this.phlegmaticMap), symbols);
 
     for (const symbol of symbolsToCleanUp) {
-      this.#cleanUpOneClosedPosition(symbol);
+      this.#cleanUpOnePosition(symbol);
     }
 
     return !!symbolsToCleanUp.length;
   };
 
-  #cleanUpOneClosedPosition = (symbol: string): void => {
+  #cleanUpOnePosition = (symbol: string): void => {
     const info = this.#phlegmaticInfo[symbol];
 
     if (!info) return;
 
     info.pullProfitCleanUp();
-    if (info.pullProfitTimeoutId) clearTimeout(info.pullProfitTimeoutId);
-    info.pullProfitTimeoutId = null;
+    if (info.pullProfitTimeoutId !== null) {
+      clearTimeout(info.pullProfitTimeoutId);
+      info.pullProfitTimeoutId = null;
+    }
 
     info.reduceLossCleanUp();
-    if (info.reduceLossTimeoutId) clearTimeout(info.reduceLossTimeoutId);
-    info.reduceLossTimeoutId = null;
+    if (info.reduceLossTimeoutId !== null) {
+      clearTimeout(info.reduceLossTimeoutId);
+      info.reduceLossTimeoutId = null;
+    }
 
     info.takeProfitCleanUp();
-    if (info.takeProfitTickTimeoutId) clearTimeout(info.takeProfitTickTimeoutId);
-    info.takeProfitTickTimeoutId = null;
-    delete this.#phlegmaticInfo[symbol];
+    if (info.takeProfitTickTimeoutId !== null) {
+      clearTimeout(info.takeProfitTickTimeoutId);
+      info.takeProfitTickTimeoutId = null;
+    }
 
     info.stopLossCleanUp();
-    if (info.stopLossTickTimeoutId) clearTimeout(info.stopLossTickTimeoutId);
-    info.stopLossTickTimeoutId = null;
+    if (info.stopLossTickTimeoutId !== null) {
+      clearTimeout(info.stopLossTickTimeoutId);
+      info.stopLossTickTimeoutId = null;
+    }
+
     delete this.#phlegmaticInfo[symbol];
   };
 
@@ -149,6 +176,8 @@ export default class PhlegmaticStore {
     if (!symbol) throw new Error('Phlegmating position symbol is missing');
 
     if (this.#phlegmaticInfo[symbol]) return phlegmaticPosition;
+
+    log(phlegmaticPosition.symbol, 'Enpower position');
 
     const info: PhlegmaticPositionInfo = {
       pullProfitTimeoutId: null,
@@ -226,9 +255,11 @@ export default class PhlegmaticStore {
       pullProfitSecondsInterval, pullProfitPercentTrigger, pullProfitPercentValue,
     } = phlegmaticPosition;
     const now = Date.now();
+    const { isWidgetEnabled } = this;
 
     if (
-      pullProfitSecondsInterval !== null
+      isWidgetEnabled
+      && pullProfitSecondsInterval !== null
       && pullProfitPercentTrigger !== null
       && pullProfitPercentValue !== null
     ) {
@@ -257,7 +288,7 @@ export default class PhlegmaticStore {
         log(symbol, 'Pull profit tick');
       }
     } else {
-      log(symbol, 'Pull profit tick (invalid fields)');
+      log(symbol, 'Pull profit tick (invalid fields or widget disabled)');
     }
 
     const requestTimeDiff = Date.now() - now;
@@ -284,9 +315,11 @@ export default class PhlegmaticStore {
       reduceLossSecondsInterval, reduceLossPercentTrigger, reduceLossPercentValue,
     } = phlegmaticPosition;
     const now = Date.now();
+    const { isWidgetEnabled } = this;
 
     if (
-      reduceLossSecondsInterval !== null
+      isWidgetEnabled
+      && reduceLossSecondsInterval !== null
       && reduceLossPercentTrigger !== null
       && reduceLossPercentValue !== null
     ) {
@@ -315,7 +348,7 @@ export default class PhlegmaticStore {
         log(symbol, 'Reduce loss tick');
       }
     } else {
-      log(symbol, 'Reduce loss tick (invalid fields)');
+      log(symbol, 'Reduce loss tick (invalid fields or widget disabled)');
     }
 
     const requestTimeDiff = Date.now() - now;
@@ -341,8 +374,13 @@ export default class PhlegmaticStore {
     const { takeProfitSecondsShouldRemain, takeProfitPercentTrigger } = phlegmaticPosition;
     const { pnlPercent } = this.#getPositionPnl(symbol);
     const now = Date.now();
+    const { isWidgetEnabled } = this;
 
-    if (takeProfitSecondsShouldRemain !== null && takeProfitPercentTrigger !== null) {
+    if (
+      isWidgetEnabled
+      && takeProfitSecondsShouldRemain !== null
+      && takeProfitPercentTrigger !== null
+    ) {
       if (pnlPercent >= takeProfitPercentTrigger) {
         log(symbol, 'Take profit is going to trigger soon...');
 
@@ -357,7 +395,7 @@ export default class PhlegmaticStore {
         info.takeProfitLastUnsatisfiedTime = now;
       }
     } else {
-      log(symbol, 'Take profit tick (invalid fields)');
+      log(symbol, 'Take profit tick (invalid fields or widget disabled)');
 
       info.takeProfitLastUnsatisfiedTime = now;
     }
@@ -377,8 +415,12 @@ export default class PhlegmaticStore {
     const { stopLossSecondsShouldRemain, stopLossPercentTrigger } = phlegmaticPosition;
     const { pnlPercent } = this.#getPositionPnl(symbol);
     const now = Date.now();
+    const { isWidgetEnabled } = this;
 
-    if (stopLossSecondsShouldRemain !== null && stopLossPercentTrigger !== null) {
+    if (isWidgetEnabled
+      && stopLossSecondsShouldRemain !== null
+      && stopLossPercentTrigger !== null
+    ) {
       if (pnlPercent <= -stopLossPercentTrigger) {
         log(symbol, 'Stop loss is going to trigger soon...');
 
@@ -393,7 +435,7 @@ export default class PhlegmaticStore {
         info.stopLossLastUnsatisfiedTime = now;
       }
     } else {
-      log(symbol, 'Stop loss tick (invalid fields)');
+      log(symbol, 'Stop loss tick (invalid fields or widget disabled)');
 
       info.stopLossLastUnsatisfiedTime = now;
     }

@@ -10,6 +10,7 @@ module.exports = {
     'react/require-default-props': 0,
     'no-restricted-syntax': 0,
     'no-void': 0,
+    'class-methods-use-this': 0,
   },
   parserOptions: {
     ecmaVersion: 2020,
