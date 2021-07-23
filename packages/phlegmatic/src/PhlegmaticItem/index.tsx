@@ -99,16 +99,16 @@ const PhlegmaticItem = ({
         onChangeEnabled={setIsTakeProfitEnabled}
         onItemChange={onItemChange}
       />
-      <StopLoss
-        isEnabled={isStopLossEnabled}
-        item={item}
-        onChangeEnabled={setIsStopLossEnabled}
-        onItemChange={onItemChange}
-      />
       <ReduceLoss
         isEnabled={isReduceLossEnabled}
         item={item}
         onChangeEnabled={setIsReduceLossEnabled}
+        onItemChange={onItemChange}
+      />
+      <StopLoss
+        isEnabled={isStopLossEnabled}
+        item={item}
+        onChangeEnabled={setIsStopLossEnabled}
         onItemChange={onItemChange}
       />
     </tbody>
