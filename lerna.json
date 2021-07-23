@@ -2,5 +2,6 @@
   "packages": [
     "packages/*"
   ],
+  "ignoreChanges": ["**/dist/**"],
   "version": "0.0.7"
 }
