@@ -1,6 +1,6 @@
 import * as t from 'biduul-types';
 
-export type PnlType = 'pnl' | 'truePnl';
+export type PnlPercentType = 'pnlPositionPercent' | 'pnlBalancePercent';
 
 export interface RootStore extends t.RootStore {
   phlegmatic: PhlegmaticStoreGlobal;

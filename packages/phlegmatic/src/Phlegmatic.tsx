@@ -7,7 +7,7 @@ import { Table } from 'reactstrap';
 import { hot } from 'react-hot-loader/root';
 
 import PhlegmaticItem from './PhlegmaticItem';
-import { PnlType } from './types';
+import { PnlPercentType } from './types';
 import Settings from './Settings';
 import { PHLEGMATIC, TRADING } from './lib/storeSelectors';
 
@@ -33,7 +33,7 @@ const Phlegmatic = ({
   );
 
   const [pnlType, setPnlType] = useChange(PHLEGMATIC, 'pnlType');
-  const [settingsPnlType, setSettingsPnlType] = useState<PnlType>(pnlType);
+  const [settingsPnlType, setSettingsPnlType] = useState<PnlPercentType>(pnlType);
 
   // update pnlType after settings save
   useEffect(() => listenSettingsSave(() => { setPnlType(settingsPnlType); }));

@@ -35,8 +35,8 @@ const PhlegmaticItem = ({
   const [isReduceLossEnabled, setIsReduceLossEnabled] = useItem(item, 'isReduceLossEnabled', onItemChange);
   const [isStopLossEnabled, setIsStopLossEnabled] = useItem(item, 'isStopLossEnabled', onItemChange);
   const pnlType = useValue(PHLEGMATIC, 'pnlType');
-  const pnl = position?.[pnlType] ?? 0;
-  const pnlPercent = position?.[pnlType === 'truePnl' ? 'truePnlPercent' : 'pnlPercent'] ?? 0;
+  const pnl = position?.pnl ?? 0;
+  const pnlPercent = position?.[pnlType] ?? 0;
 
   return (
     <tbody>

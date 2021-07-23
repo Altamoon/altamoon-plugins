@@ -1,7 +1,7 @@
 import { listenChange } from 'use-change';
 import { difference, map } from 'lodash';
 import * as t from 'biduul-types';
-import { PhlegmaticPosition, PnlType, RootStore } from './types';
+import { PhlegmaticPosition, PnlPercentType, RootStore } from './types';
 
 function getPersistentStorageValue<O, T>(key: keyof O & string, defaultValue: T): T {
   const storageValue = localStorage.getItem(`phlegmatic_${key}`);
@@ -30,7 +30,7 @@ interface PhlegmaticPositionInfo {
 }
 
 export default class PhlegmaticStore {
-  public pnlType: PnlType = getPersistentStorageValue<PhlegmaticStore, PnlType>('pnlType', 'pnl');
+  public pnlType: PnlPercentType = getPersistentStorageValue<PhlegmaticStore, PnlPercentType>('pnlType', 'pnlPositionPercent');
 
   public phlegmaticMap = getPersistentStorageValue<PhlegmaticStore, Record<string, PhlegmaticPosition>>('phlegmaticMap', {});
 
@@ -235,13 +235,12 @@ export default class PhlegmaticStore {
     return phlegmaticPosition;
   };
 
-  #getPositionPnl = (symbol: string): { pnl: number; pnlPercent: number } => {
+  #getPositionPnl = (symbol: string): number => {
     const position = this.#store.trading.openPositions.find((pos) => pos.symbol === symbol);
-    if (!position) return { pnl: 0, pnlPercent: 0 };
+    if (!position) return 0;
     const { pnlType } = this;
-    const pnl = position?.[pnlType] ?? 0;
-    const pnlPercent = position?.[pnlType === 'truePnl' ? 'truePnlPercent' : 'pnlPercent'] ?? 0;
-    return { pnl, pnlPercent };
+
+    return position?.[pnlType] ?? 0;
   };
 
   #pullProfitIteration = async (phlegmaticPosition: PhlegmaticPosition): Promise<void> => {
@@ -263,7 +262,7 @@ export default class PhlegmaticStore {
       && pullProfitPercentTrigger !== null
       && pullProfitPercentValue !== null
     ) {
-      const { pnlPercent } = this.#getPositionPnl(symbol);
+      const pnlPercent = this.#getPositionPnl(symbol);
 
       if (pnlPercent >= pullProfitPercentTrigger) {
         log(symbol, 'Pull profit trigger!');
@@ -323,7 +322,7 @@ export default class PhlegmaticStore {
       && reduceLossPercentTrigger !== null
       && reduceLossPercentValue !== null
     ) {
-      const { pnlPercent } = this.#getPositionPnl(symbol);
+      const pnlPercent = this.#getPositionPnl(symbol);
 
       if (pnlPercent <= -reduceLossPercentTrigger) {
         log(symbol, 'Reduce loss trigger!');
@@ -372,7 +371,7 @@ export default class PhlegmaticStore {
     if (!info) throw new Error('Phlegmating info is missing');
 
     const { takeProfitSecondsShouldRemain, takeProfitPercentTrigger } = phlegmaticPosition;
-    const { pnlPercent } = this.#getPositionPnl(symbol);
+    const pnlPercent = this.#getPositionPnl(symbol);
     const now = Date.now();
     const { isWidgetEnabled } = this;
 
@@ -413,7 +412,7 @@ export default class PhlegmaticStore {
     if (!info) throw new Error('Phlegmating info is missing');
 
     const { stopLossSecondsShouldRemain, stopLossPercentTrigger } = phlegmaticPosition;
-    const { pnlPercent } = this.#getPositionPnl(symbol);
+    const pnlPercent = this.#getPositionPnl(symbol);
     const now = Date.now();
     const { isWidgetEnabled } = this;
 

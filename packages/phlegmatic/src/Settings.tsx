@@ -1,23 +1,24 @@
 import React, { Dispatch, ReactElement } from 'react';
-import { PnlType } from './types';
+import isType from './lib/isType';
+import { PnlPercentType } from './types';
 
 interface Props {
-  pnlType: PnlType;
-  setPnlType: Dispatch<PnlType>;
+  pnlType: PnlPercentType;
+  setPnlType: Dispatch<PnlPercentType>;
 }
 
 const Settings = ({ pnlType, setPnlType }: Props): ReactElement => (
   <>
     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-    <label htmlFor="phlegmatic_pnl_type" className="form-label">PNL type</label>
+    <label htmlFor="phlegmatic_pnl_type" className="form-label">PNL percentage type</label>
     <select
       id="phlegmatic_pnl_type"
       className="form-control"
       value={pnlType}
       onChange={({ target }) => setPnlType(target.value as Props['pnlType'])}
     >
-      <option value="pnl">Position PNL</option>
-      <option value="truePnl">True PNL</option>
+      <option value={isType<PnlPercentType>('pnlPositionPercent')}>ROI (Return on Investment)</option>
+      <option value={isType<PnlPercentType>('pnlBalancePercent')}>ROW (Return on Wallet)</option>
     </select>
   </>
 );
