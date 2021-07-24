@@ -1,6 +1,6 @@
 {
   "name": "biduul-hello-world-react",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Hello world example plugin for Biduul made with React, Webpack and TypeScript",
   "main": "dist/bundle.js",
   "scripts": {
