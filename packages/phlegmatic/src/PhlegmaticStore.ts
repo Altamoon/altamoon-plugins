@@ -8,11 +8,6 @@ function getPersistentStorageValue<O, T>(key: keyof O & string, defaultValue: T)
   return storageValue ? JSON.parse(storageValue) as T : defaultValue;
 }
 
-function log(symbol: string | null, ...msg: unknown[]) {
-  // eslint-disable-next-line no-console
-  console.log(`%cPhlegmatic${symbol ? ` (${String(symbol)})` : ''} %c${msg.join(' ')}`, 'color: grey', 'color: black');
-}
-
 interface PhlegmaticPositionInfo {
   pullProfitTimeoutId: ReturnType<typeof setTimeout> | null;
   pullProfitCleanUp: () => void;
@@ -30,11 +25,19 @@ interface PhlegmaticPositionInfo {
 }
 
 export default class PhlegmaticStore {
+  public log = (symbol: string | null, ...msg: unknown[]): void => {
+    if (!this.shouldLog) return;
+    // eslint-disable-next-line no-console
+    console.log(`%cPhlegmatic${symbol ? ` (${String(symbol)})` : ''} %c${msg.join(' ')}`, 'color: grey', 'color: black');
+  };
+
   public pnlType: PnlPercentType = getPersistentStorageValue<PhlegmaticStore, PnlPercentType>('pnlType', 'pnlPositionPercent');
 
   public phlegmaticMap = getPersistentStorageValue<PhlegmaticStore, Record<string, PhlegmaticPosition>>('phlegmaticMap', {});
 
   public isWidgetEnabled: boolean;
+
+  public shouldLog = false;
 
   #store: Store;
 
@@ -90,7 +93,7 @@ export default class PhlegmaticStore {
   }
 
   public destroy = (): void => {
-    log(null, 'Destroy');
+    this.log(null, 'Destroy');
     const symbolsToCleanUp = Object.keys(this.phlegmaticMap);
 
     this.#unlistenOpenPositions();
@@ -177,12 +180,12 @@ export default class PhlegmaticStore {
 
     if (this.#phlegmaticInfo[symbol]) return phlegmaticPosition;
 
-    log(phlegmaticPosition.symbol, 'Enpower position');
+    this.log(phlegmaticPosition.symbol, 'Enpower position');
 
     const info: PhlegmaticPositionInfo = {
       pullProfitTimeoutId: null,
       pullProfitCleanUp: listenChange(phlegmaticPosition, 'isPullProfitEnabled', (isEnabled) => {
-        log(phlegmaticPosition.symbol, 'isPullProfitEnabled =', isEnabled);
+        this.log(phlegmaticPosition.symbol, 'isPullProfitEnabled =', isEnabled);
         if (isEnabled) {
           void this.#pullProfitIteration(phlegmaticPosition);
         } else if (info.pullProfitTimeoutId !== null) {
@@ -193,7 +196,7 @@ export default class PhlegmaticStore {
 
       reduceLossTimeoutId: null,
       reduceLossCleanUp: listenChange(phlegmaticPosition, 'isReduceLossEnabled', (isEnabled) => {
-        log(phlegmaticPosition.symbol, 'isReduceLossEnabled =', isEnabled);
+        this.log(phlegmaticPosition.symbol, 'isReduceLossEnabled =', isEnabled);
         if (isEnabled) {
           void this.#reduceLossIteration(phlegmaticPosition);
         } else if (info.reduceLossTimeoutId !== null) {
@@ -265,7 +268,7 @@ export default class PhlegmaticStore {
       const pnlPercent = this.#getPositionPnl(symbol);
 
       if (pnlPercent >= pullProfitPercentTrigger) {
-        log(symbol, 'Pull profit trigger!');
+        this.log(symbol, 'Pull profit trigger!');
         const position = this.#store.trading.openPositions.find((pos) => pos.symbol === symbol);
 
         if (!position) throw new Error(`Phlegmatic error: Unable to find position of symbol "${symbol}" to pull profit.`);
@@ -284,10 +287,10 @@ export default class PhlegmaticStore {
           return; // do not continue and do not run timeout fhen position is killed
         }
       } else {
-        log(symbol, 'Pull profit tick');
+        this.log(symbol, 'Pull profit tick');
       }
     } else {
-      log(symbol, 'Pull profit tick (invalid fields or widget disabled)');
+      this.log(symbol, 'Pull profit tick (invalid fields or widget disabled)');
     }
 
     const requestTimeDiff = Date.now() - now;
@@ -325,7 +328,7 @@ export default class PhlegmaticStore {
       const pnlPercent = this.#getPositionPnl(symbol);
 
       if (pnlPercent <= -reduceLossPercentTrigger) {
-        log(symbol, 'Reduce loss trigger!');
+        this.log(symbol, 'Reduce loss trigger!');
         const position = this.#store.trading.openPositions.find((pos) => pos.symbol === symbol);
 
         if (!position) throw new Error(`Phlegmatic error: Unable to find position of symbol "${symbol}" to reduce loss.`);
@@ -344,10 +347,10 @@ export default class PhlegmaticStore {
           return; // do not continue and do not run timeout fhen position is killed
         }
       } else {
-        log(symbol, 'Reduce loss tick');
+        this.log(symbol, 'Reduce loss tick');
       }
     } else {
-      log(symbol, 'Reduce loss tick (invalid fields or widget disabled)');
+      this.log(symbol, 'Reduce loss tick (invalid fields or widget disabled)');
     }
 
     const requestTimeDiff = Date.now() - now;
@@ -381,20 +384,20 @@ export default class PhlegmaticStore {
       && takeProfitPercentTrigger !== null
     ) {
       if (pnlPercent >= takeProfitPercentTrigger) {
-        log(symbol, 'Take profit is going to trigger soon...');
+        this.log(symbol, 'Take profit is going to trigger soon...');
 
         if (now - info.takeProfitLastUnsatisfiedTime > takeProfitSecondsShouldRemain * 1000) {
-          log(symbol, 'Take profit trigger!');
+          this.log(symbol, 'Take profit trigger!');
           await this.#store.trading.closePosition(symbol);
           return; // do not continue and do not run timeout fhen position is killed
         }
       } else {
-        log(symbol, 'Take profit tick');
+        this.log(symbol, 'Take profit tick');
 
         info.takeProfitLastUnsatisfiedTime = now;
       }
     } else {
-      log(symbol, 'Take profit tick (invalid fields or widget disabled)');
+      this.log(symbol, 'Take profit tick (invalid fields or widget disabled)');
 
       info.takeProfitLastUnsatisfiedTime = now;
     }
@@ -421,20 +424,20 @@ export default class PhlegmaticStore {
       && stopLossPercentTrigger !== null
     ) {
       if (pnlPercent <= -stopLossPercentTrigger) {
-        log(symbol, 'Stop loss is going to trigger soon...');
+        this.log(symbol, 'Stop loss is going to trigger soon...');
 
         if (now - info.stopLossLastUnsatisfiedTime > stopLossSecondsShouldRemain * 1000) {
-          log(symbol, 'Stop loss trigger!');
+          this.log(symbol, 'Stop loss trigger!');
           await this.#store.trading.closePosition(symbol);
           return; // do not continue and do not run timeout fhen position is killed
         }
       } else {
-        log(symbol, 'Stop loss tick');
+        this.log(symbol, 'Stop loss tick');
 
         info.stopLossLastUnsatisfiedTime = now;
       }
     } else {
-      log(symbol, 'Stop loss tick (invalid fields or widget disabled)');
+      this.log(symbol, 'Stop loss tick (invalid fields or widget disabled)');
 
       info.stopLossLastUnsatisfiedTime = now;
     }
