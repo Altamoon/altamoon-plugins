@@ -1,18 +1,21 @@
 import React, { memo, ReactElement } from 'react';
+import * as t from 'biduul-types';
 import MiniNumberInput from '../lib/MiniNumberInput';
 import PhlegmaticSwitch from '../lib/PhlegmaticSwitch';
 import useItem from '../lib/useItem';
 import { PhlegmaticPosition } from '../types';
 
 interface Props {
+  isDefault: boolean;
   isEnabled: boolean;
   item: PhlegmaticPosition;
+  position?: t.TradingPosition;
   onItemChange?: (item: PhlegmaticPosition, key: string) => void;
   onChangeEnabled: (isEnabled: boolean) => void;
 }
 
 const TakeProfit = ({
-  isEnabled, item, onItemChange, onChangeEnabled,
+  isDefault, isEnabled, item, position, onItemChange, onChangeEnabled,
 }: Props): ReactElement => {
   const [takeProfitPercentTrigger, setTakeProfitPercentTrigger] = useItem(item, 'takeProfitPercentTrigger', onItemChange);
   const [takeProfitSecondsShouldRemain, setTakeProfitSecondsShouldRemain] = useItem(item, 'takeProfitSecondsShouldRemain', onItemChange);
@@ -31,22 +34,26 @@ const TakeProfit = ({
         />
       </td>
       <td className={!isEnabled ? 'text-muted' : undefined}>
-        Take remaining profit when PNL reaches
+        Close if PNL ≥
         {' '}
         <MiniNumberInput
+          isDefault={isDefault}
           isEnabled={isEnabled}
+          isPnlPercent
+          position={position}
           value={takeProfitPercentTrigger}
           onChange={setTakeProfitPercentTrigger}
         />
-        % and remains above for
+        % and remains for
         {' '}
         <MiniNumberInput
+          isDefault={isDefault}
           isEnabled={isEnabled}
           value={takeProfitSecondsShouldRemain}
           onChange={setTakeProfitSecondsShouldRemain}
         />
         {' '}
-        seconds
+        sec
       </td>
     </tr>
   );

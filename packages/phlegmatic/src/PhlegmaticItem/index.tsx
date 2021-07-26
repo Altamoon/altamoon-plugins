@@ -1,7 +1,7 @@
 import React, { memo, ReactElement } from 'react';
 import { format } from 'd3-format';
 import { Badge } from 'reactstrap';
-import { TradingPosition } from 'biduul-types';
+import * as t from 'biduul-types';
 import { useValue } from 'use-change';
 
 import useItem from '../lib/useItem';
@@ -22,7 +22,7 @@ const textClassName = (value: number) => {
 
 interface Props {
   isDefault: boolean;
-  position?: TradingPosition
+  position?: t.TradingPosition;
   item: PhlegmaticPosition;
   onItemChange?: (item: PhlegmaticPosition, key: string) => void;
 }
@@ -88,26 +88,34 @@ const PhlegmaticItem = ({
         </td>
       </tr>
       <PullProfit
+        isDefault={isDefault}
         isEnabled={isPullProfitEnabled}
         item={item}
+        position={position}
         onChangeEnabled={setIsPullProfitEnabled}
         onItemChange={onItemChange}
       />
-      <TakeProfit
-        isEnabled={isTakeProfitEnabled}
-        item={item}
-        onChangeEnabled={setIsTakeProfitEnabled}
-        onItemChange={onItemChange}
-      />
       <ReduceLoss
+        isDefault={isDefault}
         isEnabled={isReduceLossEnabled}
         item={item}
+        position={position}
         onChangeEnabled={setIsReduceLossEnabled}
         onItemChange={onItemChange}
       />
+      <TakeProfit
+        isDefault={isDefault}
+        isEnabled={isTakeProfitEnabled}
+        item={item}
+        position={position}
+        onChangeEnabled={setIsTakeProfitEnabled}
+        onItemChange={onItemChange}
+      />
       <StopLoss
+        isDefault={isDefault}
         isEnabled={isStopLossEnabled}
         item={item}
+        position={position}
         onChangeEnabled={setIsStopLossEnabled}
         onItemChange={onItemChange}
       />

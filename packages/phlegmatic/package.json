@@ -25,7 +25,7 @@
     "@types/bootstrap": "^5.0.17",
     "@types/d3-format": "^3.0.1",
     "@types/lodash": "^4.14.171",
-    "@types/react": "^17.0.14",
+    "@types/react": "^17.0.15",
     "@types/react-dom": "^17.0.9",
     "@types/styled-components": "^5.1.11",
     "babel-loader": "^8.2.2",
@@ -35,7 +35,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "biduul-types": "^0.0.42",
+    "biduul-types": "^0.0.44",
     "bootstrap": "^5.0.2",
     "d3-format": "^3.0.1",
     "lodash": "^4.17.21",

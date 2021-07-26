@@ -1,18 +1,21 @@
 import React, { memo, ReactElement } from 'react';
+import * as t from 'biduul-types';
 import MiniNumberInput from '../lib/MiniNumberInput';
 import PhlegmaticSwitch from '../lib/PhlegmaticSwitch';
 import useItem from '../lib/useItem';
 import { PhlegmaticPosition } from '../types';
 
 interface Props {
+  isDefault: boolean;
   isEnabled: boolean;
   item: PhlegmaticPosition;
+  position?: t.TradingPosition;
   onItemChange?: (item: PhlegmaticPosition, key: string) => void;
   onChangeEnabled: (isEnabled: boolean) => void;
 }
 
 const StopLoss = ({
-  isEnabled, item, onItemChange, onChangeEnabled,
+  isDefault, isEnabled, item, position, onItemChange, onChangeEnabled,
 }: Props): ReactElement => {
   const [stopLossPercentTrigger, setStopLossPercentTrigger] = useItem(item, 'stopLossPercentTrigger', onItemChange);
   const [stopLossSecondsShouldRemain, setStopLossSecondsShouldRemain] = useItem(item, 'stopLossSecondsShouldRemain', onItemChange);
@@ -31,23 +34,28 @@ const StopLoss = ({
         />
       </td>
       <td className={!isEnabled ? 'text-muted' : undefined}>
-        Stop loss when PNL reaches
+        Close if PNL ≤
         {' '}
         &minus;
         <MiniNumberInput
+          isDefault={isDefault}
           isEnabled={isEnabled}
+          isPnlPercent
+          isNegative
+          position={position}
           value={stopLossPercentTrigger}
           onChange={setStopLossPercentTrigger}
         />
-        % and remains below for
+        % and remains for
         {' '}
         <MiniNumberInput
+          isDefault={isDefault}
           isEnabled={isEnabled}
           value={stopLossSecondsShouldRemain}
           onChange={setStopLossSecondsShouldRemain}
         />
         {' '}
-        seconds
+        sec
       </td>
     </tr>
   );
