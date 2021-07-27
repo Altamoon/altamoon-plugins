@@ -40,7 +40,7 @@ const calcPrice = (
   const percent = parseNumber(valueStr);
   if (!position || percent === null) return 0;
   const { entryPrice, leverage } = position;
-  return entryPrice + ((entryPrice * ((percent / 100) * leverage)) * (isNegative ? -1 : 1));
+  return entryPrice + ((entryPrice * ((percent / 100) / leverage)) * (isNegative ? -1 : 1));
 };
 
 const MiniNumberInput = ({
@@ -50,8 +50,25 @@ const MiniNumberInput = ({
   const setCustomLines = useSet(({ customization }: t.RootStore) => customization, 'customPriceLines');
   const [tooltipRef, setTooltip] = useBootstrapTooltip({ trigger: 'focus' });
 
+  const updateTooltip = useCallback((yValue: number, percent: number | null) => {
+    if (isDefault || !isPnlPercent || !position) return;
+
+    if (percent === null) {
+      setTooltip('Incorrect value');
+    } else {
+      const profit = (isNegative ? -1 : 1)
+        * (position.baseValue / position.leverage)
+        * (percent / 100);
+      setTooltip(`
+        1 ${position.baseAsset} = ${format(`.${position.pricePrecision}f`)(yValue)} USDT 
+        <nobr><span${profit ? ` class="${profit > 0 ? 'text-success' : 'text-danger'}"` : ''}>${(profit > 0 ? '+' : '') + profit.toFixed(2)} USDT</span></nobr>
+      `.trim());
+    }
+  }, [isDefault, isNegative, isPnlPercent, position, setTooltip]);
+
   const onFocus = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
     if (isDefault || !isPnlPercent || !position) return;
+    const percent = parseNumber(target.value);
     const yValue = calcPrice(isNegative, target.value, position);
     setCustomLines((customLines) => [
       ...customLines.filter(({ id }) => id !== priceLineId),
@@ -64,8 +81,8 @@ const MiniNumberInput = ({
       },
     ]);
 
-    setTooltip(`${format(`.${position.pricePrecision}f`)(yValue)} USDT`);
-  }, [isDefault, isNegative, isPnlPercent, position, setCustomLines, setTooltip]);
+    updateTooltip(yValue, percent);
+  }, [isDefault, isNegative, isPnlPercent, position, setCustomLines, updateTooltip]);
 
   const onBlur = useCallback(() => {
     if (isDefault || !isPnlPercent || !position) return;
@@ -73,8 +90,9 @@ const MiniNumberInput = ({
   }, [isDefault, isPnlPercent, position, setCustomLines]);
 
   const onInputChange = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
+    const percent = parseNumber(target.value);
     setValueStr(target.value);
-    onChange(parseNumber(target.value));
+    onChange(percent);
 
     if (isDefault || !isPnlPercent || !position) return;
     const yValue = calcPrice(isNegative, target.value, position);
@@ -82,11 +100,11 @@ const MiniNumberInput = ({
       .map((customLine) => (customLine.id === priceLineId ? {
         ...customLine,
         yValue,
-        isVisible: parseNumber(target.value) !== null,
+        isVisible: percent !== null,
       } : customLine)));
 
-    setTooltip(`${format(`.${position.pricePrecision}f`)(yValue)} USDT`);
-  }, [isDefault, isNegative, isPnlPercent, onChange, position, setCustomLines, setTooltip]);
+    updateTooltip(yValue, percent);
+  }, [isDefault, isNegative, isPnlPercent, onChange, position, setCustomLines, updateTooltip]);
 
   return (
     <Input
