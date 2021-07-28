@@ -1,7 +1,7 @@
 import { listenChange } from 'use-change';
 import { difference, map } from 'lodash';
 import * as t from 'biduul-types';
-import { PhlegmaticPosition, PnlPercentType, RootStore } from './types';
+import { PhlegmaticPosition, RootStore } from './types';
 
 function getPersistentStorageValue<O, T>(key: keyof O & string, defaultValue: T): T {
   const storageValue = localStorage.getItem(`phlegmatic_${key}`);
@@ -30,8 +30,6 @@ export default class PhlegmaticStore {
     // eslint-disable-next-line no-console
     console.log(`%cPhlegmatic${symbol ? ` (${String(symbol)})` : ''} %c${msg.join(' ')}`, 'color: grey', 'color: black');
   };
-
-  public pnlType: PnlPercentType = getPersistentStorageValue<PhlegmaticStore, PnlPercentType>('pnlType', 'pnlPositionPercent');
 
   public phlegmaticMap = getPersistentStorageValue<PhlegmaticStore, Record<string, PhlegmaticPosition>>('phlegmaticMap', {});
 
@@ -81,7 +79,7 @@ export default class PhlegmaticStore {
       });
     });
 
-    const keysToListen: (keyof PhlegmaticStore)[] = ['phlegmaticMap', 'pnlType'];
+    const keysToListen: (keyof PhlegmaticStore)[] = ['phlegmaticMap'];
 
     keysToListen.forEach((key) => {
       listenChange(this, key, (value: unknown) => {
@@ -238,13 +236,10 @@ export default class PhlegmaticStore {
     return phlegmaticPosition;
   };
 
-  #getPositionPnl = (symbol: string): number => {
-    const position = this.#store.trading.openPositions.find((pos) => pos.symbol === symbol);
-    if (!position) return 0;
-    const { pnlType } = this;
-
-    return position?.[pnlType] ?? 0;
-  };
+  #getPositionPnl = (
+    symbol: string,
+  ): number => this.#store.trading.openPositions
+    .find((pos) => pos.symbol === symbol)?.pnlPositionPercent ?? 0;
 
   #pullProfitIteration = async (phlegmaticPosition: PhlegmaticPosition): Promise<void> => {
     if (!phlegmaticPosition) throw new Error('Phlegmating position is missing');
