@@ -2,7 +2,7 @@ import React, { memo, ReactElement } from 'react';
 import { format } from 'd3-format';
 import { Badge } from 'reactstrap';
 import * as t from 'biduul-types';
-import { useValue } from 'use-change';
+import { useSet, useValue } from 'use-change';
 
 import useItem from '../lib/useItem';
 import { PhlegmaticPosition } from '../types';
@@ -10,7 +10,7 @@ import PullProfit from './PullProfit';
 import TakeProfit from './TakeProfit';
 import StopLoss from './StopLoss';
 import ReduceLoss from './ReduceLoss';
-import { PHLEGMATIC } from '../lib/storeSelectors';
+import { PHLEGMATIC, PERSISTENT } from '../lib/storeSelectors';
 
 const formatNumber = (n: number, ignorePrecision?: boolean) => format(n < 10 && !ignorePrecision ? ',.4f' : ',.2f')(n);
 const formatPercent = format(',.1f');
@@ -34,6 +34,7 @@ const PhlegmaticItem = ({
   const [isTakeProfitEnabled, setIsTakeProfitEnabled] = useItem(item, 'isTakeProfitEnabled', onItemChange);
   const [isReduceLossEnabled, setIsReduceLossEnabled] = useItem(item, 'isReduceLossEnabled', onItemChange);
   const [isStopLossEnabled, setIsStopLossEnabled] = useItem(item, 'isStopLossEnabled', onItemChange);
+  const setSymbol = useSet(PERSISTENT, 'symbol');
   const pnlType = useValue(PHLEGMATIC, 'pnlType');
   const pnl = position?.pnl ?? 0;
   const pnlPercent = position?.[pnlType] ?? 0;
@@ -52,9 +53,17 @@ const PhlegmaticItem = ({
               <p>
                 {position.initialAmt}
                 {' '}
-                {position.baseAsset}
+                <span
+                  className="link-alike"
+                  onClick={() => setSymbol(position.symbol)}
+                  onKeyDown={() => setSymbol(position.symbol)}
+                  role="button"
+                  tabIndex={0}
+                >
+                  {position.baseAsset}
+                </span>
                 {' '}
-              &nbsp;
+                &nbsp;
                 {!!position && (
                 <Badge className={position.side === 'BUY' ? 'bg-success' : 'bg-danger'}>
                   {position.leverage}
