@@ -40,7 +40,7 @@ const calcPrice = (
   const percent = parseNumber(valueStr);
   if (!position || percent === null) return 0;
   const { entryPrice, leverage } = position;
-  return entryPrice + ((entryPrice * ((percent / 100) / leverage)) * (isNegative ? -1 : 1));
+  return entryPrice + ((entryPrice * ((percent / 100) / leverage)) * (isNegative ? -1 : 1) * (position.side === 'SELL' ? -1 : 1));
 };
 
 const MiniNumberInput = ({
