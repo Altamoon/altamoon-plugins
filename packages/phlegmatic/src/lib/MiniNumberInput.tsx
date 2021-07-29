@@ -56,7 +56,7 @@ const MiniNumberInput = ({
     if (percent === null) {
       setTooltip('Incorrect value');
     } else {
-      const profit = (isNegative ? -1 : 1)
+      const profit = (isNegative ? -1 : 1) * (position.side === 'SELL' ? -1 : 1)
         * (position.baseValue / position.leverage)
         * (percent / 100);
       setTooltip(`
