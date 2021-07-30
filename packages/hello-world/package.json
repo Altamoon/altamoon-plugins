@@ -1,6 +1,6 @@
 {
   "name": "biduul-hello-world",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Hello world example plugin for Biduul",
   "main": "index.js",
   "scripts": {
