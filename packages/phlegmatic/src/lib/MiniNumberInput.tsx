@@ -2,11 +2,12 @@ import React, {
   ChangeEvent, ReactElement, RefObject, useCallback, useState,
 } from 'react';
 import styled from 'styled-components';
-import { useSet } from 'use-change';
+import { useSet, useValue } from 'use-change';
 import * as t from 'biduul-types';
 
 import { format } from 'd3-format';
 import useBootstrapTooltip from './useBootstrapTooltip';
+import { CUSTOMIZATION, TRADING } from './storeSelectors';
 
 const Input = styled.input`
     padding: 0.1rem 0.2rem !important;
@@ -28,7 +29,7 @@ interface Props {
   onChange: (value: number | null) => void;
 }
 
-const priceLineId = 'phlegmatic_price_line';
+const PRICE_LINE_ID = 'phlegmatic_price_line';
 
 const parseNumber = (str: string) => (str && !Number.isNaN(+str) ? +str : null);
 
@@ -44,14 +45,16 @@ const calcPrice = (
 };
 
 const MiniNumberInput = ({
-  position, value, isPnlPercent, isDefault, isEnabled, isNegative, onChange,
+  position: givenPosition, value, isPnlPercent, isDefault, isEnabled, isNegative, onChange,
 }: Props): ReactElement => {
   const [valueStr, setValueStr] = useState(value?.toString() ?? '');
-  const setCustomLines = useSet(({ customization }: t.RootStore) => customization, 'customPriceLines');
+  const setCustomLines = useSet(CUSTOMIZATION, 'customPriceLines');
+  const currentSymbolPseudoPosition = useValue(TRADING, 'currentSymbolPseudoPosition');
   const [tooltipRef, setTooltip] = useBootstrapTooltip({ trigger: 'focus' });
+  const position = isDefault ? currentSymbolPseudoPosition : givenPosition;
 
   const updateTooltip = useCallback((yValue: number, percent: number | null) => {
-    if (isDefault || !isPnlPercent || !position) return;
+    if (!isPnlPercent || !position) return;
 
     if (percent === null) {
       setTooltip('Incorrect value');
@@ -61,58 +64,60 @@ const MiniNumberInput = ({
         * (percent / 100);
       setTooltip(`
         1 ${position.baseAsset} = ${format(`.${position.pricePrecision}f`)(yValue)} USDT 
-        <nobr><span${profit ? ` class="${profit > 0 ? 'text-success' : 'text-danger'}"` : ''}>${(profit > 0 ? '+' : '') + profit.toFixed(2)} USDT</span></nobr>
+        ${!isDefault ? `<nobr>
+          <span${profit ? ` class="${profit > 0 ? 'text-success' : 'text-danger'}"` : ''}>
+            ${(profit > 0 ? '+' : '') + profit.toFixed(2)} USDT
+          </span>
+        </nobr>` : ''}
       `.trim());
     }
   }, [isDefault, isNegative, isPnlPercent, position, setTooltip]);
 
   const onFocus = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
-    if (isDefault || !isPnlPercent || !position) return;
+    if (!isPnlPercent || !position) return;
     const percent = parseNumber(target.value);
     const yValue = calcPrice(isNegative, target.value, position);
     setCustomLines((customLines) => [
-      ...customLines.filter(({ id }) => id !== priceLineId),
+      ...customLines.filter(({ id }) => id !== PRICE_LINE_ID),
       {
         yValue,
         isVisible: parseNumber(target.value) !== null,
         title: 'Phlegmatic',
-        id: priceLineId,
+        id: PRICE_LINE_ID,
         color: 'purple',
       },
     ]);
 
     updateTooltip(yValue, percent);
-  }, [isDefault, isNegative, isPnlPercent, position, setCustomLines, updateTooltip]);
+  }, [isNegative, isPnlPercent, position, setCustomLines, updateTooltip]);
 
   const onBlur = useCallback(() => {
-    if (isDefault || !isPnlPercent || !position) return;
-    setCustomLines((customLines) => customLines.filter(({ id }) => id !== priceLineId));
-  }, [isDefault, isPnlPercent, position, setCustomLines]);
+    if (!isPnlPercent || !position) return;
+    setCustomLines((customLines) => customLines.filter(({ id }) => id !== PRICE_LINE_ID));
+  }, [isPnlPercent, position, setCustomLines]);
 
   const onInputChange = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
     const percent = parseNumber(target.value);
     setValueStr(target.value);
     onChange(percent);
 
-    if (isDefault || !isPnlPercent || !position) return;
+    if (!isPnlPercent || !position) return;
     const yValue = calcPrice(isNegative, target.value, position);
     setCustomLines((customLines) => customLines
-      .map((customLine) => (customLine.id === priceLineId ? {
+      .map((customLine) => (customLine.id === PRICE_LINE_ID ? {
         ...customLine,
         yValue,
         isVisible: percent !== null,
       } : customLine)));
 
     updateTooltip(yValue, percent);
-  }, [isDefault, isNegative, isPnlPercent, onChange, position, setCustomLines, updateTooltip]);
+  }, [isNegative, isPnlPercent, onChange, position, setCustomLines, updateTooltip]);
 
   return (
     <Input
       className={`form-control d-inline${(valueStr && !Number.isNaN(+valueStr)) || !isEnabled ? '' : ' is-invalid'}`}
       value={valueStr}
-      ref={isDefault || !isPnlPercent || !position
-        ? undefined
-        : tooltipRef as RefObject<HTMLInputElement>}
+      ref={!isPnlPercent ? undefined : tooltipRef as RefObject<HTMLInputElement>}
       style={{ width: `${Math.max(30, (valueStr.length + 1) * 10)}px` }}
       onChange={onInputChange}
       onFocus={onFocus}
