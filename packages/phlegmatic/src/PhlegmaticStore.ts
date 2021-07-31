@@ -35,7 +35,7 @@ export default class PhlegmaticStore {
 
   public isWidgetEnabled: boolean;
 
-  public shouldLog = false;
+  public shouldLog = true;
 
   #store: Store;
 
@@ -273,7 +273,7 @@ export default class PhlegmaticStore {
         const { quantityPrecision } = this.#store.market.futuresExchangeSymbols[symbol];
         const pureQuantity = initialAmt * (pullProfitPercentValue / 100);
 
-        const reduceQuantity = Math.min(positionAmt, Math.floor(
+        const reduceQuantity = Math[position.side === 'BUY' ? 'min' : 'max'](positionAmt, Math.floor(
           pureQuantity * (10 ** quantityPrecision),
         ) / (10 ** quantityPrecision));
 
@@ -333,7 +333,7 @@ export default class PhlegmaticStore {
         const { quantityPrecision } = this.#store.market.futuresExchangeSymbols[symbol];
         const pureQuantity = initialAmt * (reduceLossPercentValue / 100);
 
-        const reduceQuantity = Math.min(positionAmt, Math.floor(
+        const reduceQuantity = Math[position.side === 'BUY' ? 'min' : 'max'](positionAmt, Math.floor(
           pureQuantity * (10 ** quantityPrecision),
         ) / (10 ** quantityPrecision));
 
