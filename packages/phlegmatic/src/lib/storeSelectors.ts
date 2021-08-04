@@ -6,3 +6,4 @@ export const PERSISTENT = ({ persistent }: RootStore): RootStore['persistent'] =
 export const PHLEGMATIC = ({ phlegmatic }: RootStore): RootStore['phlegmatic'] => phlegmatic;
 export const DEFAULTS = ({ phlegmatic }: RootStore): RootStore['phlegmatic']['defaults'] => phlegmatic.defaults;
 export const CUSTOMIZATION = ({ customization }: RootStore): RootStore['customization'] => customization;
+export const ACCOUNT = ({ account }: RootStore): RootStore['account'] => account;

@@ -22,7 +22,20 @@ interface PhlegmaticPositionInfo {
   stopLossLastUnsatisfiedTime: number;
   stopLossTickTimeoutId: ReturnType<typeof setTimeout> | null
   stopLossCleanUp: () => void;
+
+  recoverTickTimeoutId: ReturnType<typeof setTimeout> | null
+  recoverCleanUp: () => void;
 }
+
+const stopLossAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_mariodie.wav');
+const takeProfitAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_stage_clear.wav');
+const pullProfitAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_coin.wav');
+const reduceLossAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_pipe.wav');
+const recoverAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_powerup_appears.wav');
+
+setTimeout(() => {
+  // void a.play();
+});
 
 export default class PhlegmaticStore {
   public log = (symbol: string | null, ...msg: unknown[]): void => {
@@ -33,9 +46,11 @@ export default class PhlegmaticStore {
 
   public phlegmaticMap = getPersistentStorageValue<PhlegmaticStore, Record<string, PhlegmaticPosition>>('phlegmaticMap', {});
 
+  public soundsOn = getPersistentStorageValue<PhlegmaticStore, boolean>('soundsOn', false);
+
   public isWidgetEnabled: boolean;
 
-  public shouldLog = true;
+  public shouldLog = false;
 
   #store: Store;
 
@@ -47,6 +62,7 @@ export default class PhlegmaticStore {
     isTakeProfitEnabled: getPersistentStorageValue<PhlegmaticPosition, boolean>('isTakeProfitEnabled', false),
     isReduceLossEnabled: getPersistentStorageValue<PhlegmaticPosition, boolean>('isReduceLossEnabled', false),
     isStopLossEnabled: getPersistentStorageValue<PhlegmaticPosition, boolean>('isStopLossEnabled', false),
+    isRecoverEnabled: getPersistentStorageValue<PhlegmaticPosition, boolean>('isRecoverEnabled', false),
 
     pullProfitPercentValue: getPersistentStorageValue<PhlegmaticPosition, number>('pullProfitPercentValue', 10),
     pullProfitPercentTrigger: getPersistentStorageValue<PhlegmaticPosition, number>('pullProfitPercentTrigger', 5),
@@ -61,6 +77,10 @@ export default class PhlegmaticStore {
 
     stopLossPercentTrigger: getPersistentStorageValue<PhlegmaticPosition, number>('stopLossPercentTrigger', 10),
     stopLossSecondsShouldRemain: getPersistentStorageValue<PhlegmaticPosition, number>('stopLossSecondsShouldRemain', 5),
+
+    recoverPercentTrigger: getPersistentStorageValue<PhlegmaticPosition, number>('recoverPercentTrigger', 10),
+    recoverBalancePercentStop: getPersistentStorageValue<PhlegmaticPosition, number>('recoverBalancePercentStop', 10),
+    recoverBalancePercentAdd: getPersistentStorageValue<PhlegmaticPosition, number>('recoverBalancePercentAdd', 10),
   };
 
   public get defaults(): PhlegmaticPosition { return this.#defaults; }
@@ -79,7 +99,7 @@ export default class PhlegmaticStore {
       });
     });
 
-    const keysToListen: (keyof PhlegmaticStore)[] = ['phlegmaticMap'];
+    const keysToListen: (keyof PhlegmaticStore)[] = ['phlegmaticMap', 'soundsOn'];
 
     keysToListen.forEach((key) => {
       listenChange(this, key, (value: unknown) => {
@@ -102,6 +122,8 @@ export default class PhlegmaticStore {
       this.#cleanUpOnePosition(symbol);
     }
   };
+
+  #getMinimumInterval = () => 750 * this.#store.trading.openPositions.length;
 
   #onOpenPositionsTick = (openPositions: t.TradingPosition[]): void => {
     const newMap: Record<string, PhlegmaticPosition> = {};
@@ -169,6 +191,12 @@ export default class PhlegmaticStore {
       info.stopLossTickTimeoutId = null;
     }
 
+    info.recoverCleanUp();
+    if (info.recoverTickTimeoutId !== null) {
+      clearTimeout(info.recoverTickTimeoutId);
+      info.recoverTickTimeoutId = null;
+    }
+
     delete this.#phlegmaticInfo[symbol];
   };
 
@@ -224,6 +252,16 @@ export default class PhlegmaticStore {
           info.stopLossTickTimeoutId = null;
         }
       }),
+
+      recoverTickTimeoutId: null,
+      recoverCleanUp: listenChange(phlegmaticPosition, 'isRecoverEnabled', (isEnabled) => {
+        if (isEnabled) {
+          void this.#recoverIteration(phlegmaticPosition);
+        } else if (info.recoverTickTimeoutId !== null) {
+          clearTimeout(info.recoverTickTimeoutId);
+          info.recoverTickTimeoutId = null;
+        }
+      }),
     };
 
     this.#phlegmaticInfo[symbol] = info;
@@ -232,6 +270,7 @@ export default class PhlegmaticStore {
     if (phlegmaticPosition.isTakeProfitEnabled) void this.#takeProfitIteration(phlegmaticPosition);
     if (phlegmaticPosition.isReduceLossEnabled) void this.#reduceLossIteration(phlegmaticPosition);
     if (phlegmaticPosition.isStopLossEnabled) void this.#stopLossIteration(phlegmaticPosition);
+    if (phlegmaticPosition.isRecoverEnabled) void this.#recoverIteration(phlegmaticPosition);
 
     return phlegmaticPosition;
   };
@@ -246,7 +285,7 @@ export default class PhlegmaticStore {
     const { symbol } = phlegmaticPosition;
     if (!symbol) throw new Error('Phlegmating position symbol is missing');
     const info = this.#phlegmaticInfo[symbol];
-    if (!info) throw new Error('Phlegmating info is missing');
+    if (!info) return;
 
     const {
       pullProfitSecondsInterval, pullProfitPercentTrigger, pullProfitPercentValue,
@@ -277,9 +316,14 @@ export default class PhlegmaticStore {
           pureQuantity * (10 ** quantityPrecision),
         ) / (10 ** quantityPrecision));
 
-        await this.#store.trading.closePosition(symbol, reduceQuantity);
-        if (reduceQuantity === positionAmt) {
-          return; // do not continue and do not run timeout fhen position is killed
+        const result = await this.#store.trading.closePosition(symbol, reduceQuantity);
+        if (result) {
+          if (reduceQuantity === positionAmt) {
+            if (this.soundsOn) void takeProfitAudio.play();
+            return; // do not continue and do not run timeout fhen position is killed
+          }
+
+          if (this.soundsOn) void pullProfitAudio.play();
         }
       } else {
         this.log(symbol, 'Pull profit tick');
@@ -294,11 +338,11 @@ export default class PhlegmaticStore {
     // to be able to wait for valid field values
     const interval = pullProfitSecondsInterval
       ? (pullProfitSecondsInterval * 1000) - requestTimeDiff
-      : 500;
+      : this.#getMinimumInterval();
 
     info.pullProfitTimeoutId = setTimeout(() => {
       void this.#pullProfitIteration(phlegmaticPosition);
-    }, Math.max(interval - requestTimeDiff, 200));
+    }, Math.max(interval - requestTimeDiff, this.#getMinimumInterval()));
   };
 
   #reduceLossIteration = async (phlegmaticPosition: PhlegmaticPosition): Promise<void> => {
@@ -306,7 +350,7 @@ export default class PhlegmaticStore {
     const { symbol } = phlegmaticPosition;
     if (!symbol) throw new Error('Phlegmating position symbol is missing');
     const info = this.#phlegmaticInfo[symbol];
-    if (!info) throw new Error('Phlegmating info is missing');
+    if (!info) return;
 
     const {
       reduceLossSecondsInterval, reduceLossPercentTrigger, reduceLossPercentValue,
@@ -337,9 +381,15 @@ export default class PhlegmaticStore {
           pureQuantity * (10 ** quantityPrecision),
         ) / (10 ** quantityPrecision));
 
-        await this.#store.trading.closePosition(symbol, reduceQuantity);
-        if (reduceQuantity === positionAmt) {
-          return; // do not continue and do not run timeout fhen position is killed
+        const result = await this.#store.trading.closePosition(symbol, reduceQuantity);
+
+        if (result) {
+          if (reduceQuantity === positionAmt) {
+            if (this.soundsOn) void stopLossAudio.play();
+            return; // do not continue and do not run timeout fhen position is killed
+          }
+
+          if (this.soundsOn) void reduceLossAudio.play();
         }
       } else {
         this.log(symbol, 'Reduce loss tick');
@@ -354,11 +404,11 @@ export default class PhlegmaticStore {
     // to be able to wait for valid field values
     const interval = reduceLossSecondsInterval
       ? (reduceLossSecondsInterval * 1000) - requestTimeDiff
-      : 500;
+      : this.#getMinimumInterval();
 
     info.reduceLossTimeoutId = setTimeout(() => {
       void this.#reduceLossIteration(phlegmaticPosition);
-    }, Math.max(interval - requestTimeDiff, 200));
+    }, Math.max(interval - requestTimeDiff, this.#getMinimumInterval()));
   };
 
   #takeProfitIteration = async (phlegmaticPosition: PhlegmaticPosition): Promise<void> => {
@@ -366,7 +416,7 @@ export default class PhlegmaticStore {
     const { symbol } = phlegmaticPosition;
     if (!symbol) throw new Error('Phlegmating position symbol is missing');
     const info = this.#phlegmaticInfo[symbol];
-    if (!info) throw new Error('Phlegmating info is missing');
+    if (!info) return;
 
     const { takeProfitSecondsShouldRemain, takeProfitPercentTrigger } = phlegmaticPosition;
     const pnlPercent = this.#getPositionPnl(symbol);
@@ -384,6 +434,7 @@ export default class PhlegmaticStore {
         if (now - info.takeProfitLastUnsatisfiedTime > takeProfitSecondsShouldRemain * 1000) {
           this.log(symbol, 'Take profit trigger!');
           await this.#store.trading.closePosition(symbol);
+          if (this.soundsOn) void takeProfitAudio.play();
           return; // do not continue and do not run timeout fhen position is killed
         }
       } else {
@@ -399,7 +450,7 @@ export default class PhlegmaticStore {
 
     info.takeProfitTickTimeoutId = setTimeout(() => {
       void this.#takeProfitIteration(phlegmaticPosition);
-    }, 500);
+    }, this.#getMinimumInterval());
   };
 
   #stopLossIteration = async (phlegmaticPosition: PhlegmaticPosition): Promise<void> => {
@@ -407,7 +458,7 @@ export default class PhlegmaticStore {
     const { symbol } = phlegmaticPosition;
     if (!symbol) throw new Error('Phlegmating position symbol is missing');
     const info = this.#phlegmaticInfo[symbol];
-    if (!info) throw new Error('Phlegmating info is missing');
+    if (!info) return;
 
     const { stopLossSecondsShouldRemain, stopLossPercentTrigger } = phlegmaticPosition;
     const pnlPercent = this.#getPositionPnl(symbol);
@@ -424,6 +475,7 @@ export default class PhlegmaticStore {
         if (now - info.stopLossLastUnsatisfiedTime > stopLossSecondsShouldRemain * 1000) {
           this.log(symbol, 'Stop loss trigger!');
           await this.#store.trading.closePosition(symbol);
+          if (this.soundsOn) void stopLossAudio.play();
           return; // do not continue and do not run timeout fhen position is killed
         }
       } else {
@@ -439,7 +491,74 @@ export default class PhlegmaticStore {
 
     info.stopLossTickTimeoutId = setTimeout(() => {
       void this.#stopLossIteration(phlegmaticPosition);
-    }, 500);
+    }, this.#getMinimumInterval());
+  };
+
+  #recoverIteration = async (phlegmaticPosition: PhlegmaticPosition): Promise<void> => {
+    if (!phlegmaticPosition) throw new Error('Phlegmating position is missing');
+    const { symbol } = phlegmaticPosition;
+    if (!symbol) throw new Error('Phlegmating position symbol is missing');
+    const info = this.#phlegmaticInfo[symbol];
+    if (!info) return;
+
+    const {
+      recoverPercentTrigger,
+      recoverBalancePercentStop,
+      recoverBalancePercentAdd,
+    } = phlegmaticPosition;
+    const now = Date.now();
+    const { isWidgetEnabled } = this;
+    const recoverSecondsInterval = 5;
+
+    if (
+      isWidgetEnabled
+      && recoverPercentTrigger !== null
+      && recoverBalancePercentStop !== null
+      && recoverBalancePercentAdd !== null
+    ) {
+      const pnlPercent = this.#getPositionPnl(symbol);
+      const position = this.#store.trading.openPositions.find((pos) => pos.symbol === symbol);
+      if (!position) throw new Error(`Phlegmatic error: Unable to find position of symbol "${symbol}" to reduce loss.`);
+
+      const { totalWalletBalance } = this.#store.account;
+      const { side, initialSize } = position;
+      const stopPositionSize = totalWalletBalance * (recoverBalancePercentStop / 100);
+
+      if (pnlPercent <= -recoverPercentTrigger && Math.abs(initialSize) < stopPositionSize) {
+        this.log(symbol, 'Recover trigger!');
+
+        const addSize = totalWalletBalance * (recoverBalancePercentAdd / 100);
+        const recoverQuantity = this.#store.trading.calculateQuantity({
+          symbol,
+          price: position.lastPrice,
+          size: addSize,
+        });
+
+        if (recoverQuantity > 0) {
+          await this.#store.trading.marketOrder({
+            symbol, side, quantity: recoverQuantity,
+          });
+
+          if (this.soundsOn) void recoverAudio.play();
+        } else {
+          this.log(symbol, 'Recover skip (quantity ≤ zero)');
+        }
+      } else {
+        this.log(symbol, 'Recover tick');
+      }
+    } else {
+      this.log(symbol, 'Recover tick (invalid fields or widget disabled)');
+    }
+
+    const requestTimeDiff = Date.now() - now;
+
+    // run timeout either once per reduceLossSecondsInterval seconds or 0.5 seconds
+    // to be able to wait for valid field values
+    const interval = recoverSecondsInterval * 1000 - requestTimeDiff;
+
+    info.recoverTickTimeoutId = setTimeout(() => {
+      void this.#recoverIteration(phlegmaticPosition);
+    }, Math.max(interval - requestTimeDiff, this.#getMinimumInterval() * 3));
   };
 }
 

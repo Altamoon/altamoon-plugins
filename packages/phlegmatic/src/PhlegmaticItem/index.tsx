@@ -11,6 +11,7 @@ import TakeProfit from './TakeProfit';
 import StopLoss from './StopLoss';
 import ReduceLoss from './ReduceLoss';
 import { PERSISTENT } from '../lib/storeSelectors';
+import Recover from './Recover';
 
 const formatNumber = (n: number, ignorePrecision?: boolean) => format(n < 10 && !ignorePrecision ? ',.4f' : ',.2f')(n);
 const formatPercent = format(',.1f');
@@ -34,6 +35,7 @@ const PhlegmaticItem = ({
   const [isTakeProfitEnabled, setIsTakeProfitEnabled] = useItem(item, 'isTakeProfitEnabled', onItemChange);
   const [isReduceLossEnabled, setIsReduceLossEnabled] = useItem(item, 'isReduceLossEnabled', onItemChange);
   const [isStopLossEnabled, setIsStopLossEnabled] = useItem(item, 'isStopLossEnabled', onItemChange);
+  const [isRecoverEnabled, setIsRecoverEnabled] = useItem(item, 'isRecoverEnabled', onItemChange);
   const setSymbol = useSet(PERSISTENT, 'symbol');
   const pnl = position?.pnl ?? 0;
   const pnlPercent = position?.pnlPositionPercent ?? 0;
@@ -42,7 +44,7 @@ const PhlegmaticItem = ({
     <tbody>
       <tr>
         <td
-          rowSpan={5}
+          rowSpan={6}
           className={!isPullProfitEnabled && !isTakeProfitEnabled && !isReduceLossEnabled && !isStopLossEnabled ? 'text-muted' : ''}
         >
           {isDefault && <strong>Default</strong>}
@@ -125,6 +127,14 @@ const PhlegmaticItem = ({
         item={item}
         position={position}
         onChangeEnabled={setIsStopLossEnabled}
+        onItemChange={onItemChange}
+      />
+      <Recover
+        isDefault={isDefault}
+        isEnabled={isRecoverEnabled}
+        item={item}
+        position={position}
+        onChangeEnabled={setIsRecoverEnabled}
         onItemChange={onItemChange}
       />
     </tbody>

@@ -7,7 +7,7 @@ import * as t from 'biduul-types';
 
 import { format } from 'd3-format';
 import useBootstrapTooltip from './useBootstrapTooltip';
-import { CUSTOMIZATION, TRADING } from './storeSelectors';
+import { CUSTOMIZATION, TRADING, ACCOUNT } from './storeSelectors';
 
 const Input = styled.input`
     padding: 0.1rem 0.2rem !important;
@@ -50,6 +50,7 @@ const MiniNumberInput = ({
   const [valueStr, setValueStr] = useState(value?.toString() ?? '');
   const setCustomLines = useSet(CUSTOMIZATION, 'customPriceLines');
   const currentSymbolPseudoPosition = useValue(TRADING, 'currentSymbolPseudoPosition');
+  const totalWalletBalance = useValue(ACCOUNT, 'totalWalletBalance');
   const [tooltipRef, setTooltip] = useBootstrapTooltip({ trigger: 'focus' });
   const position = isDefault ? currentSymbolPseudoPosition : givenPosition;
 
@@ -62,16 +63,23 @@ const MiniNumberInput = ({
       const profit = (isNegative ? -1 : 1) * (position.side === 'SELL' ? -1 : 1)
         * (position.baseValue / position.leverage)
         * (percent / 100);
+      const profitBalancePercent = (profit/totalWalletBalance) * 100;
       setTooltip(`
         1 ${position.baseAsset} = ${format(`.${position.pricePrecision}f`)(yValue)} USDT 
         ${!isDefault ? `<nobr>
           <span${profit ? ` class="${profit > 0 ? 'text-success' : 'text-danger'}"` : ''}>
             ${(profit > 0 ? '+' : '') + profit.toFixed(2)} USDT
           </span>
+        </nobr>
+        <br>
+        <nobr>
+          <span${profitBalancePercent ? ` class="${profitBalancePercent > 0 ? 'text-success' : 'text-danger'}"` : ''}>
+            ${(profitBalancePercent > 0 ? '+' : '') + profitBalancePercent.toFixed(2)}%
+          </span> on wallet
         </nobr>` : ''}
       `.trim());
     }
-  }, [isDefault, isNegative, isPnlPercent, position, setTooltip]);
+  }, [isDefault, isNegative, isPnlPercent, position, setTooltip, totalWalletBalance]);
 
   const onFocus = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
     if (!isPnlPercent || !position) return;

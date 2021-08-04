@@ -12,6 +12,7 @@ export interface PhlegmaticPosition {
   isTakeProfitEnabled: boolean;
   isReduceLossEnabled: boolean;
   isStopLossEnabled: boolean;
+  isRecoverEnabled: boolean;
 
   pullProfitPercentValue: number | null;
   pullProfitPercentTrigger: number | null;
@@ -26,4 +27,8 @@ export interface PhlegmaticPosition {
 
   stopLossPercentTrigger: number | null;
   stopLossSecondsShouldRemain: number | null;
+
+  recoverPercentTrigger: number | null;
+  recoverBalancePercentStop: number | null;
+  recoverBalancePercentAdd: number | null;
 }
