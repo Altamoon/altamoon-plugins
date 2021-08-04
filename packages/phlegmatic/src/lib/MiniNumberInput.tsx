@@ -63,7 +63,7 @@ const MiniNumberInput = ({
       const profit = (isNegative ? -1 : 1) * (position.side === 'SELL' ? -1 : 1)
         * (position.baseValue / position.leverage)
         * (percent / 100);
-      const profitBalancePercent = (profit/totalWalletBalance) * 100;
+      const profitBalancePercent = (profit / totalWalletBalance) * 100;
       setTooltip(`
         1 ${position.baseAsset} = ${format(`.${position.pricePrecision}f`)(yValue)} USDT 
         ${!isDefault ? `<nobr>
