@@ -521,10 +521,13 @@ export default class PhlegmaticStore {
       if (!position) throw new Error(`Phlegmatic error: Unable to find position of symbol "${symbol}" to reduce loss.`);
 
       const { totalWalletBalance } = this.#store.account;
-      const { side, initialSize } = position;
+      const { side, initialValue } = position;
       const stopPositionSize = totalWalletBalance * (recoverBalancePercentStop / 100);
 
-      if (pnlPercent <= -recoverPercentTrigger && Math.abs(initialSize) < stopPositionSize) {
+      if (
+        pnlPercent <= -recoverPercentTrigger
+        && Math.abs(initialValue / position.leverage) < stopPositionSize
+      ) {
         this.log(symbol, 'Recover trigger!');
 
         const addSize = totalWalletBalance * (recoverBalancePercentAdd / 100);
