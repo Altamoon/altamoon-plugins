@@ -23,18 +23,13 @@ To use the plugin select "Plugins" at Biduul UI and switch biduul-phlegmatic plu
 
 The plugin comes with all the strategies turned off out from the box. The "Default" settings define how new positions should behave once they open.
 
-![image](https://user-images.githubusercontent.com/1082083/126350917-045f2e7a-c27e-4a4c-a432-e37a1d08ca22.png)
+![image](https://user-images.githubusercontent.com/1082083/132659503-d29647ed-069e-4586-bd1c-7b94531462a5.png)
 
 Once a position is created, it can be controled individually.
 
-![image](https://user-images.githubusercontent.com/1082083/126351059-fdf9b96d-0052-4d33-98f8-d1166b418f9f.png)
+![image](https://user-images.githubusercontent.com/1082083/132659454-a682669d-5d64-4c3f-84a5-ac83862b0c2a.png)
 
 **Important!** It's recommended to turn off a strategy before changing its numbers to clean up intervals and avoid perventage issues; enable them after the numbers are set up.
-
-Plugin settings allow to define what type of PNL is used: "Position PNL" or "True PNL".
-
-![image](https://user-images.githubusercontent.com/1082083/126351574-05617fde-d148-4ec7-8690-a22106d1bdd1.png)
-
 
 ## Develop
 
