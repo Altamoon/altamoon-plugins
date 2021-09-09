@@ -7,6 +7,7 @@ The plugin includes the following "strategies" to close positions:
 - **Take profit** works similar to the regular TP feature but waits for a given amount of time to pass while PNL is above given percentage to protect from the sutiation when PNL is high for just a moment.
 - **Reduce loss** works similar to "Pull profit" but the other way around. It checks if PNL is below given percentage and partially closes position every given amount of time to protect from bigger losses if PNL drops more. 
 - **Stop loss** works similar to the reguar SL feature but protects from situations when PNL drops quickly but restores in a moment. It doesn't protect from situations when price drops but doesn't restore back.
+- **Recover** allows to extend position if PNL drops below given percentage.
 
 To see what does the plugin exactly do, take a look at the screenshots below which are quite self-explanatory.
 
