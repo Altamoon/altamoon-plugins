@@ -8,7 +8,7 @@
     "dev": "http-server --port 8082 -c-1"
   },
   "author": "",
-  "license": "AGPL",
+  "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "http-server": "^0.12.3"
   }

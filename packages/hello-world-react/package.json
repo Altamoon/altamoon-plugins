@@ -9,7 +9,7 @@
     "dev": "webpack serve --mode=development --hot --port=8081"
   },
   "author": "",
-  "license": "AGPL",
+  "license": "AGPL-3.0-or-later",
   "babel": {
     "presets": [
       "@babel/preset-env",
