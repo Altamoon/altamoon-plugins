@@ -1,6 +1,6 @@
 {
   "name": "biduul-phlegmatic",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Biduul plugin that imitates human behavior to close Binance future positions",
   "main": "dist/bundle.js",
   "scripts": {
@@ -18,9 +18,9 @@
     ]
   },
   "repository": {
-		"type": "git",
-		"url": "git+https://github.com/Letiliel/biduul-plugins.git"
-	},
+    "type": "git",
+    "url": "git+https://github.com/Letiliel/biduul-plugins.git"
+  },
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",

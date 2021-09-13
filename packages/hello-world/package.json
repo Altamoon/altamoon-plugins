@@ -1,6 +1,6 @@
 {
   "name": "biduul-hello-world",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Hello world example plugin for Biduul",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "http-server": "^0.12.3"
   },
   "repository": {
-		"type": "git",
-		"url": "git+https://github.com/Letiliel/biduul-plugins.git"
-	}
+    "type": "git",
+    "url": "git+https://github.com/Letiliel/biduul-plugins.git"
+  }
 }
