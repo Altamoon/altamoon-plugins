@@ -4,6 +4,8 @@
 
 The plugin uses [minichart-grid](https://github.com/Letiliel/minichart-grid) as a Biduul widget and provides all Binance futures market candle charts at one place.
 
+![image](https://user-images.githubusercontent.com/1082083/133078629-0a5aa8a5-01e1-4cb6-9984-5fbb1ca22cfa.png)
+
 ## Install
 
 Enable the plugin via Plugins menu.
