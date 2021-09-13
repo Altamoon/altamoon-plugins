@@ -34,6 +34,6 @@
   },
   "dependencies": {
     "biduul-types": "^0.0.61",
-    "minichart-grid": "^0.0.16"
+    "minichart-grid": "^0.0.18"
   }
 }
