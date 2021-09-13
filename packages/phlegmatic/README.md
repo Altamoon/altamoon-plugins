@@ -40,5 +40,5 @@ Plugin settings allow to define what type of PNL is used: "Position PNL" or "Tru
 - Install [NodeJS](https://nodejs.org/en/).
 - Clone the repository and go the plugin folder (`cd biduul-plugins/packages/phlegmatic`).
 - Run `npm ci` to install dependencies.
-- Run `npm run dev` to start [Webpack Dev Server](https://webpack.js.org/configuration/dev-server/).
+- Run `npm start` to start [Webpack Dev Server](https://webpack.js.org/configuration/dev-server/).
 - Use "Add custom plugin" Biduul feature and paste `http://localhost:8083/bundle.js` to add the plugin.

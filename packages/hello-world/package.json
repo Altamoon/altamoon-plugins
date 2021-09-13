@@ -5,11 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "http-server --port 8082 -c-1"
+    "start": "http-server --port 8082 -c-1"
   },
   "author": "",
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "http-server": "^0.12.3"
-  }
+  },
+  "repository": {
+		"type": "git",
+		"url": "git+https://github.com/Letiliel/biduul-plugins.git"
+	}
 }

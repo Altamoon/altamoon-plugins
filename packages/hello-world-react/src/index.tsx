@@ -4,7 +4,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import HelloWorld from './HelloWorld';
 
-window.biduulPlugin((store: t.RootStore /* , api: Api */) => {
+window.biduulPlugin((store: t.RootStore) => {
   const { currentScript } = document;
   if (!currentScript) throw new Error('Unable to detect currentScript');
   const {

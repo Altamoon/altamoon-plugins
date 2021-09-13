@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=production",
-    "dev": "webpack serve --mode=development --hot --port=8083"
+    "start": "webpack serve --mode=development --hot --port=8083"
   },
   "author": "",
   "license": "AGPL-3.0-or-later",
@@ -17,6 +17,10 @@
       "@babel/preset-typescript"
     ]
   },
+  "repository": {
+		"type": "git",
+		"url": "git+https://github.com/Letiliel/biduul-plugins.git"
+	},
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",

@@ -23,8 +23,8 @@ To install the plugin select "Plugins" at Biduul UI, paste `biduul-hello-world-r
 - Install [NodeJS](https://nodejs.org/en/)
 - Clone the repository and go the plugin folder (`cd biduul-plugins/packages/hello-world-react`).
 - Run `npm ci` to install dependencies.
-- Run `npm start` to start [Webpack Dev Server](https://webpack.js.org/configuration/dev-server/)
-- Use "Add custom plugin" Biduul feature and paste `http://localhost:8081/bundle.js` to add the plugin.
+- Run `npm run dev` to start [Webpack Dev Server](https://webpack.js.org/configuration/dev-server/)
+- Use "Add custom plugin" Biduul feature and paste `http://localhost:8084/bundle.js` to add the plugin.
 
 The example supports [Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/) intended to make plugin development faster.
 
