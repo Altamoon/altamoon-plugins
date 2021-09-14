@@ -54,7 +54,7 @@ const ReduceLoss = ({
           onChange={setReduceLossSecondsInterval}
         />
         {' '}
-        sec when PNL ≤
+        seconds when PNL ≤
         {' '}
         &minus;
         <MiniNumberInput

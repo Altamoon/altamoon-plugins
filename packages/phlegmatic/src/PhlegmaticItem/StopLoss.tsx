@@ -55,7 +55,7 @@ const StopLoss = ({
           onChange={setStopLossSecondsShouldRemain}
         />
         {' '}
-        sec
+        seconds
       </td>
     </tr>
   );

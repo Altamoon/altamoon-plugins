@@ -54,7 +54,7 @@ const PullProfit = ({
           onChange={setPullProfitSecondsInterval}
         />
         {' '}
-        sec when PNL ≥
+        seconds when PNL ≥
         {' '}
         <MiniNumberInput
           isDefault={isDefault}

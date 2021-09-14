@@ -53,7 +53,7 @@ const TakeProfit = ({
           onChange={setTakeProfitSecondsShouldRemain}
         />
         {' '}
-        sec
+        seconds
       </td>
     </tr>
   );
