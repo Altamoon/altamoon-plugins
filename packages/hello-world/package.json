@@ -7,7 +7,18 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "http-server --port 8082 -c-1"
   },
-  "author": "",
+  "author": {
+    "name": "Letiliel",
+    "email": "dev@xod.me",
+    "url": "https://github.com/Letiliel"
+  },
+  "contributors": [
+    {
+      "name": "Andrey Gubanov",
+      "email": "andrey@gubanov.eu",
+      "url": "https://opensource.gubanov.eu/"
+    }
+  ],
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "http-server": "^13.0.2"

@@ -17,7 +17,18 @@
     "type": "git",
     "url": "git+https://github.com/finom/biduul-plugins.git"
   },
-  "author": "",
+  "author": {
+    "name": "Letiliel",
+    "email": "dev@xod.me",
+    "url": "https://github.com/Letiliel"
+  },
+  "contributors": [
+    {
+      "name": "Andrey Gubanov",
+      "email": "andrey@gubanov.eu",
+      "url": "https://opensource.gubanov.eu/"
+    }
+  ],
   "license": "AGPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/finom/biduul-plugins/issues"

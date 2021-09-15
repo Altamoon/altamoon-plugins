@@ -8,7 +8,18 @@
     "build": "webpack --mode=production",
     "start": "webpack serve --mode=development --hot --port=8083"
   },
-  "author": "",
+  "author": {
+    "name": "Letiliel",
+    "email": "dev@xod.me",
+    "url": "https://github.com/Letiliel"
+  },
+  "contributors": [
+    {
+      "name": "Andrey Gubanov",
+      "email": "andrey@gubanov.eu",
+      "url": "https://opensource.gubanov.eu/"
+    }
+  ],
   "license": "AGPL-3.0-or-later",
   "babel": {
     "presets": [
