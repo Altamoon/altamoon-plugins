@@ -39,12 +39,12 @@
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^9.0.1",
     "typescript": "^4.4.3",
-    "webpack": "^5.53.0",
+    "webpack": "^5.54.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.2.1"
   },
   "dependencies": {
     "biduul-types": "^0.0.63",
-    "minichart-grid": "^0.0.20"
+    "minichart-grid": "^0.1.0"
   }
 }
