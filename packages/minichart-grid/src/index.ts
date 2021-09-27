@@ -4,9 +4,10 @@ import minichartGrid from 'minichart-grid';
 window.biduulPlugin((store: t.RootStore) => {
   const { currentScript } = document;
   if (!currentScript) throw new Error('Unable to detect currentScript');
-  const { element } = store.customization.createWidget({
+  const { settingsElement, element } = store.customization.createWidget({
     id: 'minichart_grid',
     hasSettings: true,
+    canSettingsSave: false,
     title: 'Minichart Grid',
     currentScript,
     layout: { h: 8, w: 8, minH: 5 },
@@ -32,6 +33,7 @@ window.biduulPlugin((store: t.RootStore) => {
   }
 
   minichartGrid(element, {
+    settingsContainer: settingsElement as HTMLElement,
     onSymbolSelect: (symbol) => {
       // eslint-disable-next-line no-param-reassign
       store.persistent.symbol = symbol;

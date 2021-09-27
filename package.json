@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run lint-pure && tsc --noemit",
-    "upgrade": "npx npm-check-updates -u && npm i --legacy-peer-deps && lerna exec -- npx npm-check-updates -u && lerna exec -- npm i",
+    "upgrade": "npx npm-check-updates -u -x eslint-config-airbnb-typescript && npm i --legacy-peer-deps && lerna exec -- npx npm-check-updates -u && lerna exec -- npm i",
     "lint-pure": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint": "npm run lint-pure -- --cache --fix",
     "patch": "lerna run build && lerna version patch --yes && lerna publish from-package --yes",
@@ -35,9 +35,9 @@
   },
   "homepage": "https://github.com/finom/biduul-plugins#readme",
   "devDependencies": {
-    "@types/node": "^16.9.6",
-    "@typescript-eslint/eslint-plugin": "^4.31.2",
-    "@typescript-eslint/parser": "^4.31.2",
+    "@types/node": "^16.10.1",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
