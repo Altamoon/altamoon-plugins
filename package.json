@@ -11,7 +11,7 @@
     "lint": "npm run lint-pure -- --cache --fix",
     "patch": "lerna run build && lerna version patch --yes && lerna publish from-package --yes",
     "minor": "lerna run build && lerna version minor && lerna publish from-package",
-    "install": "lerna exec -- npm i"
+    "install": "lerna exec -- npm ci"
   },
   "repository": {
     "type": "git",
