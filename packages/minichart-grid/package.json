@@ -1,6 +1,6 @@
 {
   "name": "biduul-minichart-grid",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "description": "Track all the Binance futures markets in one widget",
   "main": "dist/bundle.js",
   "style": "dist/style.css",
