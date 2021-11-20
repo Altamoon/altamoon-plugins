@@ -1,4 +1,4 @@
-import * as t from 'biduul-types';
+import * as t from 'altamoon-types';
 
 export interface RootStore extends t.RootStore {
   phlegmatic: PhlegmaticStoreGlobal;

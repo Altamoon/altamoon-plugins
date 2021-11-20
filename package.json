@@ -1,5 +1,5 @@
 {
-  "name": "biduul-plugins",
+  "name": "altamoon-plugins",
   "version": "0.0.0",
   "private": true,
   "description": "",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/finom/biduul-plugins.git"
+    "url": "git+https://github.com/Altamoon/altamoon-plugins.git"
   },
   "author": {
     "name": "Letiliel",
@@ -31,29 +31,29 @@
   ],
   "license": "AGPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/finom/biduul-plugins/issues"
+    "url": "https://github.com/Altamoon/altamoon-plugins/issues"
   },
-  "homepage": "https://github.com/finom/biduul-plugins#readme",
+  "homepage": "https://github.com/Altamoon/altamoon-plugins#readme",
   "devDependencies": {
-    "@types/node": "^16.10.3",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
+    "@types/node": "^16.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb": "^18.2.1",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "^19.0.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-erb": "^4.0.3",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-import-resolver-webpack": "^0.13.1",
-    "eslint-plugin-compat": "^3.13.0",
-    "eslint-plugin-import": "^2.24.2",
-    "eslint-plugin-jest": "^24.5.2",
-    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-import-resolver-webpack": "^0.13.2",
+    "eslint-plugin-compat": "^4.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^25.2.4",
+    "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-react": "^7.26.1",
-    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-promise": "^5.1.1",
+    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "lerna": "^4.0.0",
-    "typescript": "^4.4.3"
+    "typescript": "^4.5.2"
   }
 }

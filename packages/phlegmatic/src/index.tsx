@@ -6,7 +6,7 @@ import Phlegmatic from './Phlegmatic';
 import { RootStore } from './types';
 import PhlegmaticStore from './PhlegmaticStore';
 
-window.biduulPlugin<RootStore>((store) => {
+window.altamoonPlugin<RootStore>((store) => {
   const { currentScript } = document;
   if (!currentScript) throw new Error('Unable to detect currentScript');
   const {

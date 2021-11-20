@@ -1,6 +1,6 @@
-# biduul-phlegmatic [![npm version](https://badge.fury.io/js/biduul-phlegmatic.svg)](https://badge.fury.io/js/biduul-phlegmatic)
+# altamoon-phlegmatic [![npm version](https://badge.fury.io/js/altamoon-phlegmatic.svg)](https://badge.fury.io/js/altamoon-phlegmatic)
 
-> Biduul plugin that imitates human behavior to close Binance future positions
+> Altamoon plugin that imitates human behavior to close Binance future positions
 
 The plugin includes the following "strategies" to close positions:
 - **Pull profit** allows to prtially take profit when PNL reaches given PNL level every given amount of time.
@@ -13,7 +13,7 @@ To see what does the plugin exactly do, take a look at the screenshots below whi
 
 ## Install
 
-To use the plugin select "Plugins" at Biduul UI and switch biduul-phlegmatic plugin on.
+To use the plugin select "Plugins" at Altamoon UI and switch altamoon-phlegmatic plugin on.
 
 ![image](https://user-images.githubusercontent.com/1082083/126187942-01e20216-9a70-415b-a590-44f7cbdce8a8.png)
 
@@ -34,7 +34,7 @@ Once a position is created, it can be controled individually.
 ## Develop
 
 - Install [NodeJS](https://nodejs.org/en/).
-- Clone the repository and go the plugin folder (`cd biduul-plugins/packages/phlegmatic`).
+- Clone the repository and go the plugin folder (`cd altamoon-plugins/packages/phlegmatic`).
 - Run `npm ci` to install dependencies.
 - Run `npm start` to start [Webpack Dev Server](https://webpack.js.org/configuration/dev-server/).
-- Use "Add custom plugin" Biduul feature and paste `http://localhost:8083/bundle.js` to add the plugin.
+- Use "Add custom plugin" Altamoon feature and paste `http://localhost:8083/bundle.js` to add the plugin.

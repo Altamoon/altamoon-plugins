@@ -1,6 +1,6 @@
-# biduul-hello-world [![npm version](https://badge.fury.io/js/biduul-hello-world.svg)](https://badge.fury.io/js/biduul-hello-world)
+# altamoon-hello-world [![npm version](https://badge.fury.io/js/altamoon-hello-world.svg)](https://badge.fury.io/js/altamoon-hello-world)
 
-> A Biduul plugin example
+> A Altamoon plugin example
 
 The plugin provides basic functionality to buy or sell given quantity of tokens.
 
@@ -13,7 +13,7 @@ It also demonstrates how to implement plugin settings. At this case it does noth
 
 ## Install
 
-To install the plugin select "Plugins" at Biduul UI, paste `biduul-hello-world` to "Add custom plugin" field and click "Add plugin"
+To install the plugin select "Plugins" at Altamoon UI, paste `altamoon-hello-world` to "Add custom plugin" field and click "Add plugin"
 
 ![image](https://user-images.githubusercontent.com/1082083/125951305-df05c768-05eb-4ac3-ab7e-4e9efba5807c.png)
 
@@ -23,8 +23,8 @@ To install the plugin select "Plugins" at Biduul UI, paste `biduul-hello-world` 
 
 There is no environment limitation. index.js file is the complete plugin file that needs to be served by any server (NodeJS, Nginx, Apache...). This instruction is based on a simple NodeJS server installed as NPM package.
 
-- Clone the repository and go the plugin folder (`cd biduul-plugins/packages/hello-world`)
+- Clone the repository and go the plugin folder (`cd altamoon-plugins/packages/hello-world`)
 - Run `npm ci` to install dependencies.
 - Run `npm start` to run a simple HTTP server.
-- Use "Add custom plugin" Biduul feature and paste `http://localhost:8082/index.js` to add the plugin.
-- If you make a change to index.js file you need to reload Biduul via Ctrl + R.
+- Use "Add custom plugin" Altamoon feature and paste `http://localhost:8082/index.js` to add the plugin.
+- If you make a change to index.js file you need to reload Altamoon via Ctrl + R.

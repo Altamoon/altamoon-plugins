@@ -1,7 +1,7 @@
 import React, { memo, ReactElement } from 'react';
 import { format } from 'd3-format';
 import { Badge } from 'reactstrap';
-import * as t from 'biduul-types';
+import * as t from 'altamoon-types';
 import { useSet } from 'use-change';
 
 import useItem from '../lib/useItem';

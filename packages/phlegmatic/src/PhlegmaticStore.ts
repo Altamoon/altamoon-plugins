@@ -1,6 +1,6 @@
 import { listenChange } from 'use-change';
 import { difference, map } from 'lodash';
-import * as t from 'biduul-types';
+import * as t from 'altamoon-types';
 import { PhlegmaticPosition, RootStore } from './types';
 
 function getPersistentStorageValue<O, T>(key: keyof O & string, defaultValue: T): T {

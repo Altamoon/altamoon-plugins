@@ -1,5 +1,5 @@
 import React, { memo, ReactElement } from 'react';
-import * as t from 'biduul-types';
+import * as t from 'altamoon-types';
 import MiniNumberInput from '../lib/MiniNumberInput';
 import PhlegmaticSwitch from '../lib/PhlegmaticSwitch';
 import useItem from '../lib/useItem';

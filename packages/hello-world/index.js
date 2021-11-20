@@ -1,4 +1,4 @@
-/* eslint-disable no-undef, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-floating-promises, @typescript-eslint/no-unsafe-assignment */// eslint-disable-line max-len
+/* eslint-disable @typescript-eslint/no-unsafe-member-access, no-undef, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-floating-promises, @typescript-eslint/no-unsafe-assignment */// eslint-disable-line max-len
 (() => {
   const layout = `
     <div class="row">
@@ -24,7 +24,7 @@
     </select>
   `;
 
-  window.biduulPlugin((store) => {
+  window.altamoonPlugin((store) => {
     const {
       element, settingsElement, listenSettingsSave, listenSettingsCancel,
     } = store.customization.createWidget({

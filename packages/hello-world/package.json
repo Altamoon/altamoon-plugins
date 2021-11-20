@@ -1,7 +1,7 @@
 {
-  "name": "biduul-hello-world",
+  "name": "altamoon-hello-world",
   "version": "0.3.10",
-  "description": "Hello world example plugin for Biduul",
+  "description": "Hello world example plugin for Altamoon",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,10 +21,10 @@
   ],
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
-    "http-server": "^13.0.2"
+    "http-server": "^14.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Letiliel/biduul-plugins.git"
+    "url": "git+https://github.com/Altamoon/altamoon-plugins.git"
   }
 }

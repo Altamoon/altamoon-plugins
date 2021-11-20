@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import styled from 'styled-components';
 import { useSet, useValue } from 'use-change';
-import * as t from 'biduul-types';
+import * as t from 'altamoon-types';
 
 import { format } from 'd3-format';
 import useBootstrapTooltip from './useBootstrapTooltip';
