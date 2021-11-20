@@ -11,6 +11,7 @@ module.exports = {
     'no-restricted-syntax': 0,
     'no-void': 0,
     'class-methods-use-this': 0,
+    'react/function-component-definition': 0,
   },
   parserOptions: {
     ecmaVersion: 2020,

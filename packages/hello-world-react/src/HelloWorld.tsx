@@ -15,7 +15,7 @@ const HelloWorld = ({
   settingsElement, createOrder, listenSettingsSave, listenSettingsCancel,
 }: Props): ReactElement => {
   const [qty, setQty] = useState('0');
-  const [btnSize, setBtnSize] = useState<'' | 'sm' | 'lg'>(localStorage.helloWorldReactButonSize ?? '');
+  const [btnSize, setBtnSize] = useState(localStorage.helloWorldReactButonSize as '' | 'sm' | 'lg' ?? '');
 
   useEffect(() => listenSettingsSave(() => {
     // save
@@ -24,7 +24,7 @@ const HelloWorld = ({
 
   useEffect(() => listenSettingsCancel(() => {
     // reset
-    setBtnSize(localStorage.helloWorldReactButonSize);
+    setBtnSize(localStorage.helloWorldReactButonSize as '' | 'sm' | 'lg');
   }));
 
   return (
