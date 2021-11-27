@@ -33,10 +33,6 @@ const pullProfitAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb
 const reduceLossAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_pipe.wav');
 const recoverAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_powerup_appears.wav');
 
-setTimeout(() => {
-  // void a.play();
-});
-
 export default class PhlegmaticStore {
   public log = (symbol: string | null, ...msg: unknown[]): void => {
     if (!this.shouldLog) return;
@@ -50,7 +46,7 @@ export default class PhlegmaticStore {
 
   public isWidgetEnabled: boolean;
 
-  public shouldLog = false;
+  public shouldLog = true;
 
   #store: Store;
 
@@ -288,7 +284,11 @@ export default class PhlegmaticStore {
     if (!info) return;
 
     const {
-      pullProfitSecondsInterval, pullProfitPercentTrigger, pullProfitPercentValue,
+      pullProfitSecondsInterval,
+      pullProfitPercentTrigger,
+      pullProfitPercentValue,
+      isTakeProfitEnabled,
+      takeProfitPercentTrigger,
     } = phlegmaticPosition;
     const now = Date.now();
     const { isWidgetEnabled } = this;
@@ -301,7 +301,11 @@ export default class PhlegmaticStore {
     ) {
       const pnlPercent = this.#getPositionPnl(symbol);
 
-      if (pnlPercent >= pullProfitPercentTrigger) {
+      if (
+        pnlPercent >= pullProfitPercentTrigger
+        // eslint-disable-next-line max-len
+        && (!isTakeProfitEnabled || takeProfitPercentTrigger === null || (takeProfitPercentTrigger !== null && pnlPercent < takeProfitPercentTrigger))
+      ) {
         this.log(symbol, 'Pull profit trigger!');
         const position = this.#store.trading.openPositions.find((pos) => pos.symbol === symbol);
 
@@ -353,7 +357,11 @@ export default class PhlegmaticStore {
     if (!info) return;
 
     const {
-      reduceLossSecondsInterval, reduceLossPercentTrigger, reduceLossPercentValue,
+      reduceLossSecondsInterval,
+      reduceLossPercentTrigger,
+      reduceLossPercentValue,
+      isStopLossEnabled,
+      stopLossPercentTrigger,
     } = phlegmaticPosition;
     const now = Date.now();
     const { isWidgetEnabled } = this;
@@ -366,7 +374,11 @@ export default class PhlegmaticStore {
     ) {
       const pnlPercent = this.#getPositionPnl(symbol);
 
-      if (pnlPercent <= -reduceLossPercentTrigger) {
+      if (
+        pnlPercent <= -reduceLossPercentTrigger
+        // eslint-disable-next-line max-len
+        && (!isStopLossEnabled || stopLossPercentTrigger === null || (stopLossPercentTrigger !== null && pnlPercent < stopLossPercentTrigger))
+      ) {
         this.log(symbol, 'Reduce loss trigger!');
         const position = this.#store.trading.openPositions.find((pos) => pos.symbol === symbol);
 
@@ -505,6 +517,10 @@ export default class PhlegmaticStore {
       recoverPercentTrigger,
       recoverBalancePercentStop,
       recoverBalancePercentAdd,
+      isStopLossEnabled,
+      stopLossPercentTrigger,
+      isReduceLossEnabled,
+      reduceLossPercentTrigger,
     } = phlegmaticPosition;
     const now = Date.now();
     const { isWidgetEnabled } = this;
@@ -527,6 +543,10 @@ export default class PhlegmaticStore {
       if (
         pnlPercent <= -recoverPercentTrigger
         && Math.abs(initialValue / position.leverage) < stopPositionSize
+        // eslint-disable-next-line max-len
+        && (!isStopLossEnabled || stopLossPercentTrigger === null || (stopLossPercentTrigger !== null && pnlPercent < stopLossPercentTrigger))
+        // eslint-disable-next-line max-len
+        && (!isReduceLossEnabled || reduceLossPercentTrigger === null || (reduceLossPercentTrigger !== null && pnlPercent < reduceLossPercentTrigger))
       ) {
         this.log(symbol, 'Recover trigger!');
 
