@@ -530,7 +530,8 @@ export default class PhlegmaticStore {
       ) {
         this.log(symbol, 'Recover trigger!');
 
-        const addSize = totalWalletBalance * (recoverBalancePercentAdd / 100);
+        const addSize = totalWalletBalance * (recoverBalancePercentAdd / 100) * position.leverage;
+
         const recoverQuantity = this.#store.trading.calculateQuantity({
           symbol,
           price: position.lastPrice,
