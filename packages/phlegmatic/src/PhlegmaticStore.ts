@@ -537,6 +537,10 @@ export default class PhlegmaticStore {
           size: addSize,
         });
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore TODO, calculate risks locally or make better integration
+        if ('ninja' in this.#store && this.#store.ninja.positionsInfo.risks.find((r) => r.symbol === symbol && r.risk === 'high')) { console.log(`Phlegmatic & Ninja (${symbol}): Not recovering because risk is high`); return; }// eslint-disable-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, no-console
+
         if (recoverQuantity > 0) {
           await this.#store.trading.marketOrder({
             symbol, side, quantity: recoverQuantity,
