@@ -61,5 +61,6 @@
     "reactstrap": "^9.0.1",
     "styled-components": "^5.3.3",
     "use-change": "^1.0.2"
-  }
+  },
+  "gitHead": "381a953741608e843330a0713c51e53a0afc41d9"
 }
