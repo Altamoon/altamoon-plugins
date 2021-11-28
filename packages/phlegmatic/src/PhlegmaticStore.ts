@@ -119,7 +119,7 @@ export default class PhlegmaticStore {
     }
   };
 
-  #getMinimumInterval = (): number => 750 * this.#store.trading.openPositions.length;
+  #getMinimumInterval = (): number => 500 * this.#store.trading.openPositions.length;
 
   #onOpenPositionsTick = (openPositions: t.TradingPosition[]): void => {
     const newMap: Record<string, PhlegmaticPosition> = {};
