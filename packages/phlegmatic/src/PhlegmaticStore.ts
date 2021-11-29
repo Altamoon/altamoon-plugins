@@ -16,11 +16,11 @@ interface PhlegmaticPositionInfo {
   reduceLossCleanUp: () => void;
 
   takeProfitLastUnsatisfiedTime: number;
-  takeProfitTickTimeoutId: ReturnType<typeof setTimeout> | null
+  takeProfitTickTimeoutId: ReturnType<typeof setTimeout> | null;
   takeProfitCleanUp: () => void;
 
   stopLossLastUnsatisfiedTime: number;
-  stopLossTickTimeoutId: ReturnType<typeof setTimeout> | null
+  stopLossTickTimeoutId: ReturnType<typeof setTimeout> | null;
   stopLossCleanUp: () => void;
 
   recoverTickTimeoutId: ReturnType<typeof setTimeout> | null
@@ -59,6 +59,7 @@ export default class PhlegmaticStore {
     isReduceLossEnabled: getPersistentStorageValue<PhlegmaticPosition, boolean>('isReduceLossEnabled', false),
     isStopLossEnabled: getPersistentStorageValue<PhlegmaticPosition, boolean>('isStopLossEnabled', false),
     isRecoverEnabled: getPersistentStorageValue<PhlegmaticPosition, boolean>('isRecoverEnabled', false),
+    isReduceLossTriggered: getPersistentStorageValue<PhlegmaticPosition, boolean>('isReduceLossTriggered', false),
 
     pullProfitPercentValue: getPersistentStorageValue<PhlegmaticPosition, number>('pullProfitPercentValue', 10),
     pullProfitPercentTrigger: getPersistentStorageValue<PhlegmaticPosition, number>('pullProfitPercentTrigger', 5),
@@ -395,6 +396,9 @@ export default class PhlegmaticStore {
 
         const result = await this.#store.trading.closePosition(symbol, reduceQuantity);
 
+        // eslint-disable-next-line no-param-reassign
+        phlegmaticPosition.isReduceLossTriggered = true;
+
         if (result) {
           if (reduceQuantity === positionAmt) {
             if (this.soundsOn) void stopLossAudio.play();
@@ -521,6 +525,7 @@ export default class PhlegmaticStore {
       stopLossPercentTrigger,
       isReduceLossEnabled,
       reduceLossPercentTrigger,
+      isReduceLossTriggered,
     } = phlegmaticPosition;
     const now = Date.now();
     const { isWidgetEnabled } = this;
@@ -540,8 +545,18 @@ export default class PhlegmaticStore {
       const { side, initialValue } = position;
       const stopPositionSize = totalWalletBalance * (recoverBalancePercentStop / 100);
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO, calculate risks locally or make better integration
+      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const ninjaHighRisk: boolean = 'ninja' in this.#store && this.#store.ninja.positionsInfo.risks.find((r) => r.symbol === symbol && r.risk === 'high');
+      // eslint-disable-next-line no-console
+      if (ninjaHighRisk) console.info(`Phlegmatic & Ninja (${symbol}): Not recovering because risk is high`);
+
       if (
         pnlPercent <= -recoverPercentTrigger
+        && !isReduceLossTriggered
+        && !ninjaHighRisk
         && Math.abs(initialValue / position.leverage) < stopPositionSize
         // eslint-disable-next-line max-len
         && (!isStopLossEnabled || stopLossPercentTrigger === null || (stopLossPercentTrigger !== null && pnlPercent < stopLossPercentTrigger))
@@ -558,15 +573,7 @@ export default class PhlegmaticStore {
           size: addSize,
         });
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore TODO, calculate risks locally or make better integration
-        // eslint-disable-next-line max-len
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-        const ninjaHighRisk: boolean = 'ninja' in this.#store && this.#store.ninja.positionsInfo.risks.find((r) => r.symbol === symbol && r.risk === 'high');
-        // eslint-disable-next-line no-console
-        if (ninjaHighRisk) console.info(`Phlegmatic & Ninja (${symbol}): Not recovering because risk is high`);
-
-        if (!ninjaHighRisk && recoverQuantity > 0) {
+        if (recoverQuantity > 0) {
           await this.#store.trading.marketOrder({
             symbol, side, quantity: recoverQuantity,
           });

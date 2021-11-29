@@ -13,6 +13,7 @@ export interface PhlegmaticPosition {
   isReduceLossEnabled: boolean;
   isStopLossEnabled: boolean;
   isRecoverEnabled: boolean;
+  isReduceLossTriggered: boolean;
 
   pullProfitPercentValue: number | null;
   pullProfitPercentTrigger: number | null;
