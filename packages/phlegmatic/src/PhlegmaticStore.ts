@@ -396,6 +396,7 @@ export default class PhlegmaticStore {
 
         const result = await this.#store.trading.closePosition(symbol, reduceQuantity);
 
+        // make recover stop working
         // eslint-disable-next-line no-param-reassign
         phlegmaticPosition.isReduceLossTriggered = true;
 
