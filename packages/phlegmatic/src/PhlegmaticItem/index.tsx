@@ -15,7 +15,7 @@ import Recover from './Recover';
 import Toggle from '../lib/Toggle';
 
 const formatNumber = (n: number, ignorePrecision?: boolean) => format(n < 10 && !ignorePrecision ? ',.4f' : ',.2f')(n);
-const formatPercent = format(',.1f');
+const formatPercent = format(',.2f');
 const textClassName = (value: number) => {
   if (!value) return '';
 
