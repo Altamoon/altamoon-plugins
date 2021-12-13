@@ -96,7 +96,7 @@ const PhlegmaticItem = ({
 
               </p>
               <p>
-                ROI:
+                <span className="text-muted">ROI:</span>
                 {' '}
                 <span className={textClassName(pnlPercent)}>
 
@@ -105,7 +105,7 @@ const PhlegmaticItem = ({
                 </span>
               </p>
               <p>
-                ROW:
+                <span className="text-muted">ROW:</span>
                 {' '}
                 <span className={textClassName(pnlBalancePercent)}>
 
