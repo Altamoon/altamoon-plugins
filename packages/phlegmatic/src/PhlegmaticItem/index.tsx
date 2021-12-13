@@ -2,7 +2,7 @@ import React, { memo, ReactElement } from 'react';
 import { format } from 'd3-format';
 import { Badge } from 'reactstrap';
 import * as t from 'altamoon-types';
-import { useSet } from 'use-change';
+import useChange, { useSet } from 'use-change';
 
 import useItem from '../lib/useItem';
 import { PhlegmaticPosition } from '../types';
@@ -10,8 +10,9 @@ import PullProfit from './PullProfit';
 import TakeProfit from './TakeProfit';
 import StopLoss from './StopLoss';
 import ReduceLoss from './ReduceLoss';
-import { PERSISTENT } from '../lib/storeSelectors';
+import { PERSISTENT, PHLEGMATIC } from '../lib/storeSelectors';
 import Recover from './Recover';
+import Toggle from '../lib/Toggle';
 
 const formatNumber = (n: number, ignorePrecision?: boolean) => format(n < 10 && !ignorePrecision ? ',.4f' : ',.2f')(n);
 const formatPercent = format(',.1f');
@@ -37,17 +38,29 @@ const PhlegmaticItem = ({
   const [isStopLossEnabled, setIsStopLossEnabled] = useItem(item, 'isStopLossEnabled', onItemChange);
   const [isRecoverEnabled, setIsRecoverEnabled] = useItem(item, 'isRecoverEnabled', onItemChange);
   const setSymbol = useSet(PERSISTENT, 'symbol');
+  const [defaultSide, setDefaultSide] = useChange(PHLEGMATIC, 'defaultSide');
   const pnl = position?.pnl ?? 0;
   const pnlPercent = position?.pnlPositionPercent ?? 0;
+  const pnlBalancePercent = position?.pnlBalancePercent ?? 0;
 
   return (
     <tbody>
       <tr>
         <td
           rowSpan={6}
+          width={140}
           className={!isPullProfitEnabled && !isTakeProfitEnabled && !isReduceLossEnabled && !isStopLossEnabled ? 'text-muted' : ''}
         >
-          {isDefault && <strong>Default</strong>}
+          {isDefault && <strong className="d-inline-block mb-2">Default</strong>}
+          {isDefault && (
+            <Toggle
+              id="phlegmatic_default_side"
+              checkedLabel="Buy"
+              uncheckedLabel="Sell"
+              isChecked={defaultSide === 'BUY'}
+              onChange={(v) => setDefaultSide(v ? 'BUY' : 'SELL')}
+            />
+          )}
           {!isDefault && !position && <em className="text-danger">Unknown position error</em>}
           {!isDefault && !!position && (
             <>
@@ -80,11 +93,24 @@ const PhlegmaticItem = ({
                   {' '}
                   ₮
                 </span>
+
+              </p>
+              <p>
+                ROI:
                 {' '}
                 <span className={textClassName(pnlPercent)}>
-                  (
+
                   {formatPercent(pnlPercent)}
-                  %)
+                  %
+                </span>
+              </p>
+              <p>
+                ROW:
+                {' '}
+                <span className={textClassName(pnlBalancePercent)}>
+
+                  {formatPercent(pnlBalancePercent)}
+                  %
                 </span>
               </p>
               <p>

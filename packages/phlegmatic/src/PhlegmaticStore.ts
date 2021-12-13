@@ -48,7 +48,7 @@ export default class PhlegmaticStore {
 
   public shouldLog = true;
 
-  #store: Store;
+  #store: RootStore;
 
   #defaults: PhlegmaticPosition = {
     isDefault: true,
@@ -82,6 +82,8 @@ export default class PhlegmaticStore {
 
   public get defaults(): PhlegmaticPosition { return this.#defaults; }
 
+  public defaultSide = getPersistentStorageValue<PhlegmaticStore, 'BUY' | 'SELL'>('defaultSide', 'BUY');
+
   #phlegmaticInfo: Record<string, PhlegmaticPositionInfo> = {};
 
   #unlistenOpenPositions: () => void;
@@ -96,7 +98,7 @@ export default class PhlegmaticStore {
       });
     });
 
-    const keysToListen: (keyof PhlegmaticStore)[] = ['phlegmaticMap', 'soundsOn'];
+    const keysToListen: (keyof PhlegmaticStore)[] = ['phlegmaticMap', 'soundsOn', 'defaultSide'];
 
     keysToListen.forEach((key) => {
       listenChange(this, key, (value: unknown) => {

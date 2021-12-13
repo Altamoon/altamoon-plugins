@@ -39,20 +39,20 @@
     "@babel/preset-typescript": "^7.16.0",
     "@types/bootstrap": "^5.1.6",
     "@types/d3-format": "^3.0.1",
-    "@types/lodash": "^4.14.177",
-    "@types/react": "^17.0.35",
+    "@types/lodash": "^4.14.178",
+    "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
-    "@types/styled-components": "^5.1.15",
+    "@types/styled-components": "^5.1.17",
     "babel-loader": "^8.2.3",
-    "typescript": "^4.5.2",
-    "webpack": "^5.64.2",
+    "typescript": "^4.5.3",
+    "webpack": "^5.65.0",
     "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.5.0"
+    "webpack-dev-server": "^4.6.0"
   },
   "dependencies": {
-    "altamoon-types": "^0.0.101",
+    "altamoon-types": "^0.0.165",
     "bootstrap": "^5.1.3",
-    "d3-format": "^3.0.1",
+    "d3-format": "^3.1.0",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-bootstrap-icons": "^1.6.1",
@@ -60,7 +60,7 @@
     "react-hot-loader": "^4.13.0",
     "reactstrap": "^9.0.1",
     "styled-components": "^5.3.3",
-    "use-change": "^1.0.2"
+    "use-change": "^1.0.4"
   },
   "gitHead": "381a953741608e843330a0713c51e53a0afc41d9"
 }

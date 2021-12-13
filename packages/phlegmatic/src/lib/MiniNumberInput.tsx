@@ -1,5 +1,5 @@
 import React, {
-  ChangeEvent, ReactElement, RefObject, useCallback, useState,
+  ChangeEvent, ReactElement, RefObject, useCallback, useMemo, useState,
 } from 'react';
 import styled from 'styled-components';
 import { useSet, useValue } from 'use-change';
@@ -7,7 +7,9 @@ import * as t from 'altamoon-types';
 
 import { format } from 'd3-format';
 import useBootstrapTooltip from './useBootstrapTooltip';
-import { CUSTOMIZATION, TRADING, ACCOUNT } from './storeSelectors';
+import {
+  CUSTOMIZATION, TRADING, ACCOUNT, PHLEGMATIC,
+} from './storeSelectors';
 
 const Input = styled.input`
     padding: 0.1rem 0.2rem !important;
@@ -49,10 +51,14 @@ const MiniNumberInput = ({
 }: Props): ReactElement => {
   const [valueStr, setValueStr] = useState(value?.toString() ?? '');
   const setCustomLines = useSet(CUSTOMIZATION, 'customPriceLines');
+  const defaultSide = useValue(PHLEGMATIC, 'defaultSide');
   const currentSymbolPseudoPosition = useValue(TRADING, 'currentSymbolPseudoPosition');
   const totalWalletBalance = useValue(ACCOUNT, 'totalWalletBalance');
   const [tooltipRef, setTooltip] = useBootstrapTooltip({ trigger: 'focus' });
-  const position = isDefault ? currentSymbolPseudoPosition : givenPosition;
+  const position: t.TradingPosition | undefined = useMemo(() => (isDefault
+    ? { ...currentSymbolPseudoPosition, side: defaultSide } as t.TradingPosition
+    : givenPosition),
+  [currentSymbolPseudoPosition, defaultSide, givenPosition, isDefault]);
 
   const updateTooltip = useCallback((yValue: number, percent: number | null) => {
     if (!isPnlPercent || !position) return;
@@ -60,12 +66,14 @@ const MiniNumberInput = ({
     if (percent === null) {
       setTooltip('Incorrect value');
     } else {
+      const baseValue = position?.baseValue ?? 0;
+      const leverage = position?.leverage ?? 1;
       const profit = (isNegative ? -1 : 1) * (position.side === 'SELL' ? -1 : 1)
-        * (position.baseValue / position.leverage)
+        * (baseValue / leverage)
         * (percent / 100);
       const profitBalancePercent = (profit / totalWalletBalance) * 100;
       setTooltip(`
-        1 ${position.baseAsset} = ${format(`.${position.pricePrecision}f`)(yValue)} USDT 
+        1 ${position?.baseAsset ?? 'unknown'} = ${format(`.${position?.pricePrecision ?? 0}f`)(yValue)} USDT 
         ${!isDefault ? `<nobr>
           <span${profit ? ` class="${profit > 0 ? 'text-success' : 'text-danger'}"` : ''}>
             ${(profit > 0 ? '+' : '') + profit.toFixed(2)} USDT
