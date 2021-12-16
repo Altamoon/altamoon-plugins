@@ -1,6 +1,6 @@
 {
   "name": "altamoon-phlegmatic",
-  "version": "0.3.25",
+  "version": "0.3.26",
   "description": "Altamoon plugin that imitates human behavior to close Binance future positions",
   "main": "dist/bundle.js",
   "scripts": {
