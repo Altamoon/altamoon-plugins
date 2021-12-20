@@ -17,7 +17,7 @@ window.altamoonPlugin<RootStore>((store) => {
     title: 'Phlegmatic',
     currentScript,
     hasSettings: true,
-    layout: { h: 20, w: 30, minH: 5 },
+    layout: { h: 15, w: 40, minH: 5 },
   });
 
   // eslint-disable-next-line no-param-reassign
