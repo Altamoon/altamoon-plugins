@@ -14,7 +14,7 @@ window.altamoonPlugin((store: t.RootStore) => {
     hasSettings: true,
     title: 'Hello World React',
     currentScript,
-    layout: { h: 6, w: 4, minH: 5 },
+    layout: { minH: 10 },
   });
 
   const createOrder = async (side: 'BUY' | 'SELL', quantity: number) => {

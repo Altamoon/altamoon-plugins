@@ -32,7 +32,7 @@
       hasSettings: true,
       title: 'Hello World',
       currentScript: document.currentScript,
-      layout: { h: 6, w: 4, minH: 5 },
+      layout: { minH: 10 },
     });
 
     let buttonSize = localStorage.helloWorldButtonSize || '';
