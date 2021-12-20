@@ -10,9 +10,9 @@
 
 ## Overview 
 
-Altamoon plugins are published at NPM via `npm publish`, trerefore every plugin has its own version. By the time being latest plugin version is used once installed but later we're going to need to restrict that to avoid incompatibility issues and improve Altamoon security (in case if author's NPM package accesss was corrupted). We also may want to add "compatibility" field to package.json to make developers define which versions of Altamoon are compatible to the plugin (Altamoon is going to need to follow [Semantic Versioning](https://semver.org/)).
+Altamoon plugins are published at NPM via `npm publish`, therefore every plugin has its own version. By the time being the latest plugin version is used once installed but later we're going to need to restrict that to avoid incompatibility issues and improve Altamoon's security (in case the author's NPM package access is corrupted). We also may want to add a "compatibility" field to package.json to make developers define which versions of Altamoon are compatible with the plugin (Altamoon is going to need to follow [Semantic Versioning](https://semver.org/)).
 
-package.json file of any plugin needs to include `"main"` field that points to the plugin code **bundled as a single JavaScript file** or/and `"style"` field that points to a **single CSS file**.
+The package.json file of any plugin needs to include a `"main"` field that points to the plugin code **bundled as a single JavaScript file** or/and a `"style"` field that points to a **single CSS file**.
 
 ```json
 {
@@ -23,13 +23,13 @@ package.json file of any plugin needs to include `"main"` field that points to t
   ...
 ```
 
-This means that a plugin can be either of a functional script to be able to create widgets and run any custom JavaScript code but also provide custom CSS styles without affecting Altamoon functionality. 
+This means that a plugin can be either a functional script to create widgets and run any custom JavaScript code or provide custom CSS styles without affecting Altamoon's functionality. 
 
-Once a plugin installed, it's going to be loaded via `<script>` tag using [UNPKG CDN](https://unpkg.com/) if `"main"` is provided and it's going to be loaded as `<link rel="stylesheet">` if `"style"` is provided. For example "Hello World" plugin is published as [altamoon-hello-world](https://www.npmjs.com/package/altamoon-hello-world) NPM package and loaded to the app as `<script src="https://unpkg.com/altamoon-hello-world"></script>.`
+Once a plugin is installed, it's going to be loaded via `<script>` tag using [UNPKG CDN](https://unpkg.com/) if `"main"` is provided and it's going to be loaded as `<link rel="stylesheet">` if `"style"` is provided. For example "Hello World" plugin is published as [altamoon-hello-world](https://www.npmjs.com/package/altamoon-hello-world) NPM package and loaded in the app as `<script src="https://unpkg.com/altamoon-hello-world"></script>.`
 
-Every JavaScript plugin (the plugin with `"main"` field at package.json) has full access to Altamoon features (current symbol, trading functions, stats etc) and can create any number of widgets (either it's none or multiple). Plugins are created with a global variable `window.altamoonPlugin` that accepts a function that is going to be called by Altamoon once the app is loaded.
+Every JavaScript plugin (plugins with `"main"` field in package.json) has full access to Altamoon features (current symbol, trading functions, stats, etc.) and can create any number of widgets (including none). Plugins are created with a global variable `window.altamoonPlugin` that accepts a function that is going to be called by Altamoon once the app is loaded.
 
-Altamoon API itself is going to be documented later.
+The Altamoon API itself is going to be documented later.
 
 ```js
 window.altamoonPlugin((store) => {
@@ -46,7 +46,7 @@ window.altamoonPlugin((store) => {
 ...
 ```
 
-Widgets can be disabled and enabled again without stopping their plugin via Widgets menu. If a widget is disabled, its plugin still has access to the app and personal data.
+Widgets can be disabled and enabled again without stopping their plugin via the Widgets menu. If a widget is disabled, its plugin still has access to the app and personal data.
 
 ![image](https://user-images.githubusercontent.com/1082083/126359940-627c181c-a51f-4091-a435-fcdf85756f27.png)
 
@@ -101,7 +101,7 @@ window.altamoonPlugin((store: t.RootStore) => {
 
 ## React and Hot Module Replacement
 
-All official Altamoon plugins are implemented with [React](https://reactjs.org/) but it's [not a requirement](https://github.com/Altamoon/altamoon-plugins/tree/main/packages/hello-world). An example of such plugin can be found at [hello-world-react](https://github.com/Altamoon/altamoon-plugins/tree/main/packages/hello-world-react). The example also demonstrates hot module replacement: a feature of used code environment that allows to re-render components with no need to reload the application itself.
+All official Altamoon plugins are implemented with [React](https://reactjs.org/) but it's [not a requirement](https://github.com/Altamoon/altamoon-plugins/tree/main/packages/hello-world). An example of such plugin can be found at [hello-world-react](https://github.com/Altamoon/altamoon-plugins/tree/main/packages/hello-world-react). The example also demonstrates hot module replacement: a feature for development environment that allows to re-render components at runtime after code changes without needing to reload the whole application.
 
 ![](https://raw.githubusercontent.com/Altamoon/altamoon-plugins/main/.assets/hmr.gif)
 
