@@ -10,9 +10,9 @@ window.altamoonPlugin((store: t.RootStore & { minMax: MinMaxStore }) => {
   if (!currentScript) throw new Error('Unable to detect currentScript');
 
   const minMaxWidget = store.customization.createWidget({
-    id: 'altamoon_min_max_signals',
+    id: 'altamoon_min_max_alerts',
     hasSettings: true,
-    title: 'Min/Max 24h signals',
+    title: 'Min/Max 24h alerts',
     currentScript,
     layout: { h: 30, w: 40 },
   });
