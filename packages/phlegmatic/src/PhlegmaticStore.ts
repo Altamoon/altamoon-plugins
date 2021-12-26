@@ -19,6 +19,7 @@ interface PhlegmaticPositionInfo {
   takeProfitTickTimeoutId: ReturnType<typeof setTimeout> | null;
   takeProfitCleanUp: () => void;
 
+  stopLossWarningLastTriggeredTime: number;
   stopLossLastUnsatisfiedTime: number;
   stopLossTickTimeoutId: ReturnType<typeof setTimeout> | null;
   stopLossCleanUp: () => void;
@@ -27,11 +28,13 @@ interface PhlegmaticPositionInfo {
   recoverCleanUp: () => void;
 }
 
+// https://themushroomkingdom.net/media/smb/wav
 const stopLossAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_mariodie.wav');
 const takeProfitAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_stage_clear.wav');
 const pullProfitAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_coin.wav');
 const reduceLossAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_pipe.wav');
 const recoverAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_powerup_appears.wav');
+const stopLossSoonAudio = new Audio('https://themushroomkingdom.net/sounds/wav/smb/smb_warning.wav');
 
 export default class PhlegmaticStore {
   public log = (symbol: string | null, ...msg: unknown[]): void => {
@@ -573,6 +576,17 @@ export default class PhlegmaticStore {
       && stopLossSecondsShouldRemain !== null
       && stopLossPercentTrigger !== null
     ) {
+      if (
+        pnlPercent < -stopLossPercentTrigger * 0.8
+        && (
+          !info.stopLossWarningLastTriggeredTime
+          || info.stopLossWarningLastTriggeredTime < now - 60_000
+        )
+      ) {
+        info.stopLossWarningLastTriggeredTime = now;
+        if (this.soundsOn) void stopLossSoonAudio.play();
+      }
+
       if (pnlPercent <= -stopLossPercentTrigger) {
         this.log(symbol, 'Stop loss is going to trigger soon...');
 
