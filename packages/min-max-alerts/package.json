@@ -1,7 +1,7 @@
 {
-  "name": "altamoon-min-max-signals",
+  "name": "altamoon-min-max-alerts",
   "version": "0.3.30",
-  "description": "Signals at minimum or maximum for last 24h for all futures markets",
+  "description": "Notifies at minimum or maximum for last 24h for all futures markets",
   "main": "dist/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
