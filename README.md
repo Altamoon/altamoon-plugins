@@ -3,6 +3,8 @@
 > [monorepo](https://en.wikipedia.org/wiki/Monorepo) for official [Altamoon](https://github.com/Altamoon/altamoon) plugins and plugin examples.
 
 - [altamoon-phlegmatic](https://github.com/Altamoon/altamoon-plugins/tree/main/packages/phlegmatic) - Altamoon plugin that imitates human behavior to close Binance future positions.
+- [altamoon-min-max-alerts](https://github.com/Altamoon/altamoon-plugins/tree/main/packages/min-max-alerts) - The plugin notifies when a future market is at its minimum or maximum for last 24 hours.
+- [altamoon-whale-calculator](https://github.com/Altamoon/altamoon-plugins/tree/main/packages/whale-calculator) - Compound interest calculator to let you know when you're going to become a whale.
 - [altamoon-hello-world](https://github.com/Altamoon/altamoon-plugins/tree/main/packages/hello-world) - Altamoon example plugin for beginner developers.
 - [altamoon-hello-world-react](https://github.com/Altamoon/altamoon-plugins/tree/main/packages/hello-world-react) - Altamoon example plugin powered by TypeScript, Webpack and React for experienced developers.
 
