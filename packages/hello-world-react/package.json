@@ -1,6 +1,6 @@
 {
   "name": "altamoon-hello-world-react",
-  "version": "0.3.27",
+  "version": "0.3.29",
   "description": "Hello world example plugin for Altamoon made with React, Webpack and TypeScript",
   "main": "dist/bundle.js",
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "altamoon-min-max-signals",
-  "version": "0.0.0",
+  "version": "0.3.29",
   "description": "Signals at minimum or maximum for last 24h",
   "main": "dist/bundle.js",
   "scripts": {
