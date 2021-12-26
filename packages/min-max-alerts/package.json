@@ -1,6 +1,6 @@
 {
   "name": "altamoon-min-max-alerts",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Notifies at minimum or maximum for last 24h for all futures markets",
   "main": "dist/bundle.js",
   "scripts": {
