@@ -1,4 +1,4 @@
-# altamoon-min-max-alerts [![npm version](https://badge.fury.io/js/min-max-alerts.svg)](https://badge.fury.io/js/min-max-alerts)
+# altamoon-min-max-alerts [![npm version](https://badge.fury.io/js/altamoon-min-max-alerts.svg)](https://badge.fury.io/js/altamoon-min-max-alerts)
 
 > Notifies at minimum or maximum for last 24h
 
