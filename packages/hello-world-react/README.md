@@ -1,6 +1,6 @@
 # altamoon-hello-world-react [![npm version](https://badge.fury.io/js/altamoon-hello-world-react.svg)](https://badge.fury.io/js/altamoon-hello-world-react)
 
-> A altamoon plugin example powered by TypeScript, Webpack and React
+> An altamoon plugin example powered by TypeScript, Webpack and React
 
 The plugin provides basic functionality to buy or sell given quantity of tokens (as well as [the basic hello-world example](https://github.com/Altamoon/altamoon-plugins/tree/main/packages/hello-world)).
 
