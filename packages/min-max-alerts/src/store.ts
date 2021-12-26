@@ -62,8 +62,6 @@ export default class MinMaxStore {
     const listenedSymbols = symbols.filter(({ contractType }) => contractType === 'PERPETUAL')
       .slice(0, this.minMaxTop).map(({ symbol }) => symbol);
 
-    // eslint-disable-next-line no-console
-    console.info('Min/Max is Listening ', listenedSymbols);
     this.#aggTradeUnsubscribe?.();
     this.#aggTradeUnsubscribe = api.futuresAggTradeStream(
       listenedSymbols,
