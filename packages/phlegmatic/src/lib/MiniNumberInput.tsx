@@ -31,7 +31,7 @@ interface Props {
   onChange: (value: number | null) => void;
 }
 
-const PRICE_LINE_ID = 'phlegmatic_price_line';
+const PRICE_LINE_ID = 'input_focus_phlegmatic_price_line';
 
 const parseNumber = (str: string) => (str && !Number.isNaN(+str) ? +str : null);
 
@@ -98,9 +98,10 @@ const MiniNumberInput = ({
       {
         yValue,
         isVisible: parseNumber(target.value) !== null,
-        title: 'Phlegmatic',
+        title: 'Phlegmatic: Input',
         id: PRICE_LINE_ID,
         color: 'purple',
+        lineStyle: 'dashed',
       },
     ]);
 

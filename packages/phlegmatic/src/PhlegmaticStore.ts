@@ -46,7 +46,7 @@ export default class PhlegmaticStore {
 
   public isWidgetEnabled: boolean;
 
-  public shouldLog = true;
+  public shouldLog = false;
 
   #store: RootStore;
 
@@ -80,7 +80,7 @@ export default class PhlegmaticStore {
     recoverBalancePercentAdd: getPersistentStorageValue<PhlegmaticPosition, number>('recoverBalancePercentAdd', 10),
   };
 
-  public get defaults(): PhlegmaticPosition { return this.#defaults; }
+  get defaults() { return this.#defaults; }
 
   public defaultSide = getPersistentStorageValue<PhlegmaticStore, 'BUY' | 'SELL'>('defaultSide', 'BUY');
 
@@ -92,8 +92,8 @@ export default class PhlegmaticStore {
     this.#store = store;
     this.isWidgetEnabled = isWidgetInitiallyEnabled;
 
-    Object.getOwnPropertyNames(this.#defaults).forEach((key) => {
-      listenChange(this.#defaults, key as keyof PhlegmaticStore['defaults'], (value: unknown) => {
+    Object.getOwnPropertyNames(this.defaults).forEach((key) => {
+      listenChange(this.defaults, key as keyof PhlegmaticStore['defaults'], (value: unknown) => {
         localStorage.setItem(`phlegmatic_${key}`, JSON.stringify(value));
       });
     });
@@ -107,6 +107,15 @@ export default class PhlegmaticStore {
     });
 
     this.#unlistenOpenPositions = listenChange(store.trading, 'openPositions', this.#onOpenPositionsTick);
+
+    listenChange(this, 'phlegmaticMap', this.#updatePriceLines);
+    listenChange(this, 'defaultSide', this.#updatePriceLines);
+    listenChange(store.trading, 'currentSymbolLeverage', this.#updatePriceLines);
+    listenChange(store.market, 'currentSymbolLastPrice', this.#updatePriceLines);
+    listenChange(store.persistent, 'symbol', this.#updatePriceLines);
+    Object.keys(this.#defaults).forEach((key) => {
+      listenChange(this.defaults, key as keyof PhlegmaticPosition, this.#updatePriceLines);
+    });
   }
 
   public destroy = (): void => {
@@ -120,6 +129,82 @@ export default class PhlegmaticStore {
     for (const symbol of symbolsToCleanUp) {
       this.#cleanUpOnePosition(symbol);
     }
+  };
+
+  #updatePriceLines = () => {
+    const { phlegmaticMap } = this;
+    const { symbol } = this.#store.persistent;
+    const position = this.#store.trading.openPositions.find((pos) => pos.symbol === symbol);
+
+    const phlegmaticItem = symbol in phlegmaticMap ? phlegmaticMap[symbol] : this.defaults;
+    const {
+      pullProfitPercentTrigger,
+      reduceLossPercentTrigger,
+      takeProfitPercentTrigger,
+      stopLossPercentTrigger,
+      recoverPercentTrigger,
+      isPullProfitEnabled,
+      isReduceLossEnabled,
+      isTakeProfitEnabled,
+      isStopLossEnabled,
+      isRecoverEnabled,
+    } = phlegmaticItem;
+
+    const side = symbol in phlegmaticMap ? position?.side ?? 'BUY' : this.defaultSide;
+    const leverage = symbol in phlegmaticMap
+      ? position?.leverage ?? 1 : this.#store.trading.currentSymbolLeverage;
+    const entryPrice = symbol in phlegmaticMap
+      ? position?.entryPrice ?? 0 : this.#store.market.currentSymbolLastPrice ?? 0;
+
+    const lineStyle = symbol in phlegmaticMap ? 'solid' : 'dashed';
+
+    const calcLinePrice = (
+      isNegative: boolean | undefined, percent: number,
+    ) => entryPrice + ((entryPrice * ((percent / 100) / leverage)) * (isNegative ? -1 : 1) * (side === 'SELL' ? -1 : 1));
+
+    this.#store.customization.customPriceLines = [
+      ...this.#store.customization.customPriceLines.filter(({ id }) => !String(id).startsWith('phlegmatic_')),
+      {
+        yValue: calcLinePrice(false, pullProfitPercentTrigger ?? 0),
+        isVisible: pullProfitPercentTrigger !== null && isPullProfitEnabled,
+        title: 'Phlegmatic: Pull profit',
+        id: 'phlegmatic_pull_profit',
+        color: 'green',
+        lineStyle,
+      },
+      {
+        yValue: calcLinePrice(true, reduceLossPercentTrigger ?? 0),
+        isVisible: reduceLossPercentTrigger !== null && isReduceLossEnabled,
+        title: 'Phlegmatic: Reduce loss',
+        id: 'phlegmatic_reduce_loss',
+        color: 'crimson',
+        lineStyle,
+      },
+      {
+        yValue: calcLinePrice(false, takeProfitPercentTrigger ?? 0),
+        isVisible: takeProfitPercentTrigger !== null && isTakeProfitEnabled,
+        title: 'Phlegmatic: Take profit',
+        id: 'phlegmatic_take_profit',
+        color: 'lawngreen',
+        lineStyle,
+      },
+      {
+        yValue: calcLinePrice(true, stopLossPercentTrigger ?? 0),
+        isVisible: stopLossPercentTrigger !== null && isStopLossEnabled,
+        title: 'Phlegmatic: Stop loss',
+        id: 'phlegmatic_stop_loss',
+        color: 'firebrick',
+        lineStyle,
+      },
+      {
+        yValue: calcLinePrice(true, recoverPercentTrigger ?? 0),
+        isVisible: recoverPercentTrigger !== null && isRecoverEnabled,
+        title: 'Phlegmatic: Recover',
+        id: 'phlegmatic_recover',
+        color: 'gold',
+        lineStyle,
+      },
+    ];
   };
 
   #getMinimumInterval = (): number => 500 * this.#store.trading.openPositions.length;
@@ -138,7 +223,7 @@ export default class PhlegmaticStore {
         isMapChanged = true;
 
         newMap[symbol] = this.#enpowerPhlegmaticPosition({
-          ...this.#defaults,
+          ...this.defaults,
           isDefault: false,
           symbol,
         });

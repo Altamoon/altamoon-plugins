@@ -3,6 +3,7 @@ import { format } from 'd3-format';
 import { Badge } from 'reactstrap';
 import * as t from 'altamoon-types';
 import useChange, { useSet } from 'use-change';
+import { Toggle } from 'altamoon-components';
 
 import useItem from '../lib/useItem';
 import { PhlegmaticPosition } from '../types';
@@ -12,7 +13,6 @@ import StopLoss from './StopLoss';
 import ReduceLoss from './ReduceLoss';
 import { PERSISTENT, PHLEGMATIC } from '../lib/storeSelectors';
 import Recover from './Recover';
-import Toggle from '../lib/Toggle';
 
 const formatNumber = (n: number, ignorePrecision?: boolean) => format(n < 10 && !ignorePrecision ? ',.4f' : ',.2f')(n);
 const formatPercent = format(',.1f');
@@ -55,10 +55,10 @@ const PhlegmaticItem = ({
           {isDefault && (
             <Toggle
               id="phlegmatic_default_side"
-              checkedLabel="Buy"
-              uncheckedLabel="Sell"
-              isChecked={defaultSide === 'BUY'}
-              onChange={(v) => setDefaultSide(v ? 'BUY' : 'SELL')}
+              checkedLabel="Sell"
+              uncheckedLabel="Buy"
+              isChecked={defaultSide === 'SELL'}
+              onChange={(v) => setDefaultSide(v ? 'SELL' : 'BUY')}
             />
           )}
           {!isDefault && !position && <em className="text-danger">Unknown position error</em>}

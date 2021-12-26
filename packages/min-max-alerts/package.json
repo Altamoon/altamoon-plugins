@@ -40,8 +40,8 @@
     "webpack-dev-server": "^4.7.1"
   },
   "dependencies": {
-    "altamoon-binance-api": "^0.0.278",
-    "altamoon-types": "^0.0.278",
+    "altamoon-binance-api": "^0.0.279",
+    "altamoon-types": "^0.0.279",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-bootstrap-icons": "^1.7.2",

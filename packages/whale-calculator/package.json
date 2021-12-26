@@ -46,7 +46,7 @@
     "webpack-dev-server": "^4.7.1"
   },
   "dependencies": {
-    "altamoon-types": "^0.0.278",
+    "altamoon-types": "^0.0.279",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hot-loader": "^4.13.0",
