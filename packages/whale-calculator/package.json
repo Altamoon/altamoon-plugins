@@ -1,18 +1,25 @@
 {
-  "name": "altamoon-min-max-signals",
-  "version": "0.3.30",
-  "description": "Signals at minimum or maximum for last 24h for all futures markets",
+  "name": "altamoon-whale-calculator",
+  "version": "0.3.29",
+  "description": "Calculates potential profit in furure based on balance and today's PNL",
   "main": "dist/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=production",
-    "start": "webpack serve --mode=development --hot --port=8084"
+    "start": "webpack serve --mode=development --hot --port=8085"
   },
   "author": {
-    "name": "Andrey Gubanov",
-    "email": "andrey@gubanov.eu",
-    "url": "https://opensource.gubanov.eu/"
+    "name": "Letiliel",
+    "email": "dev@xod.me",
+    "url": "https://github.com/Letiliel"
   },
+  "contributors": [
+    {
+      "name": "Andrey Gubanov",
+      "email": "andrey@gubanov.eu",
+      "url": "https://opensource.gubanov.eu/"
+    }
+  ],
   "license": "AGPL-3.0-or-later",
   "babel": {
     "presets": [
@@ -30,7 +37,6 @@
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-react": "^7.16.5",
     "@babel/preset-typescript": "^7.16.5",
-    "@types/lodash": "^4.14.178",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "babel-loader": "^8.2.3",
@@ -40,16 +46,11 @@
     "webpack-dev-server": "^4.7.1"
   },
   "dependencies": {
-    "altamoon-binance-api": "^0.0.278",
     "altamoon-types": "^0.0.278",
-    "lodash": "^4.17.21",
     "react": "^17.0.2",
-    "react-bootstrap-icons": "^1.7.2",
     "react-dom": "^17.0.2",
     "react-hot-loader": "^4.13.0",
-    "react-moment": "^1.1.1",
     "reactstrap": "^9.0.1",
     "use-change": "^1.0.4"
-  },
-  "gitHead": "4319f5d8b434a2cada42d5aab3fded5c04eff8fb"
+  }
 }
