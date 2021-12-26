@@ -1,7 +1,7 @@
 {
   "name": "altamoon-min-max-signals",
   "version": "0.3.29",
-  "description": "Signals at minimum or maximum for last 24h",
+  "description": "Signals at minimum or maximum for last 24h for all futures markets",
   "main": "dist/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -50,5 +50,6 @@
     "react-moment": "^1.1.1",
     "reactstrap": "^9.0.1",
     "use-change": "^1.0.4"
-  }
+  },
+  "gitHead": "5a55bc98e712a98913528cfba6ce5644208f8ea5"
 }
