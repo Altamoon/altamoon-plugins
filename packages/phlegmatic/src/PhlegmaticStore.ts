@@ -174,6 +174,7 @@ export default class PhlegmaticStore {
         id: 'phlegmatic_pull_profit',
         color: 'green',
         lineStyle,
+        isTitleVisible: 'hover',
       },
       {
         yValue: calcLinePrice(true, reduceLossPercentTrigger ?? 0),
@@ -182,6 +183,7 @@ export default class PhlegmaticStore {
         id: 'phlegmatic_reduce_loss',
         color: 'crimson',
         lineStyle,
+        isTitleVisible: 'hover',
       },
       {
         yValue: calcLinePrice(false, takeProfitPercentTrigger ?? 0),
@@ -190,6 +192,7 @@ export default class PhlegmaticStore {
         id: 'phlegmatic_take_profit',
         color: 'lawngreen',
         lineStyle,
+        isTitleVisible: 'hover',
       },
       {
         yValue: calcLinePrice(true, stopLossPercentTrigger ?? 0),
@@ -198,6 +201,7 @@ export default class PhlegmaticStore {
         id: 'phlegmatic_stop_loss',
         color: 'firebrick',
         lineStyle,
+        isTitleVisible: 'hover',
       },
       {
         yValue: calcLinePrice(true, recoverPercentTrigger ?? 0),
@@ -206,6 +210,7 @@ export default class PhlegmaticStore {
         id: 'phlegmatic_recover',
         color: 'gold',
         lineStyle,
+        isTitleVisible: 'hover',
       },
     ];
   };
