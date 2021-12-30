@@ -19,7 +19,7 @@ interface PhlegmaticPositionInfo {
   takeProfitTickTimeoutId: ReturnType<typeof setTimeout> | null;
   takeProfitCleanUp: () => void;
 
-  stopLossWarningLastTriggeredTime: number;
+  stopLossWarningLastTriggeredTime: number | null;
   stopLossLastUnsatisfiedTime: number;
   stopLossTickTimeoutId: ReturnType<typeof setTimeout> | null;
   stopLossCleanUp: () => void;
@@ -334,6 +334,7 @@ export default class PhlegmaticStore {
         }
       }),
 
+      stopLossWarningLastTriggeredTime: null,
       stopLossLastUnsatisfiedTime: Date.now(),
       stopLossTickTimeoutId: null,
       stopLossCleanUp: listenChange(phlegmaticPosition, 'isStopLossEnabled', (isEnabled) => {
@@ -652,6 +653,9 @@ export default class PhlegmaticStore {
       const { side, initialValue } = position;
       const stopPositionSize = totalWalletBalance * (recoverBalancePercentStop / 100);
 
+      /* eslint-disable */
+      /*
+      
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore TODO, calculate risks locally or make better integration
       // eslint-disable-next-line max-len
@@ -659,11 +663,12 @@ export default class PhlegmaticStore {
       const ninjaHighRisk: boolean = 'ninja' in this.#store && this.#store.ninja.positionsInfo.risks.find((r) => r.symbol === symbol && r.risk === 'high');
       // eslint-disable-next-line no-console
       if (ninjaHighRisk) console.info(`Phlegmatic & Ninja (${symbol}): Not recovering because risk is high`);
-
+      */
+      /* eslint-enable */
       if (
         pnlPercent <= -recoverPercentTrigger
         && !isReduceLossTriggered
-        && !ninjaHighRisk
+        // && !ninjaHighRisk
         && Math.abs(initialValue / position.leverage) < stopPositionSize
         // eslint-disable-next-line max-len
         && (!isStopLossEnabled || stopLossPercentTrigger === null || (stopLossPercentTrigger !== null && pnlPercent < stopLossPercentTrigger))
